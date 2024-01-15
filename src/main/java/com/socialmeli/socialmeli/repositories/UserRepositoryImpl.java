@@ -1,6 +1,5 @@
 package com.socialmeli.socialmeli.repositories;
 
-import com.socialmeli.socialmeli.entities.Post;
 import com.socialmeli.socialmeli.entities.User;
 
 import java.util.ArrayList;
@@ -14,12 +13,12 @@ public class UserRepositoryImpl implements IUserRepository{
     }
 
     @Override
-    public Object save(Object o) {
+    public User save(User user) {
         return null;
     }
 
     @Override
-    public Object update(Object o) {
+    public User update(User user) {
         return null;
     }
 

@@ -13,12 +13,12 @@ public class PostRepositoryImpl implements IPostRepository{
     }
 
     @Override
-    public Object save(Object o) {
+    public Post save(Post post) {
         return null;
     }
 
     @Override
-    public Object update(Object o) {
+    public Post update(Post post) {
         return null;
     }
 
