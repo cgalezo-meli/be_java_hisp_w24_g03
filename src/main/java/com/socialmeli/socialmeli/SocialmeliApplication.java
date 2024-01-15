@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SocialmeliApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(SocialmeliApplication.class, args);
 	}
 
