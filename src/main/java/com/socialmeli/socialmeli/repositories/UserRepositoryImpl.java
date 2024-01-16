@@ -12,13 +12,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.List;
 
 @Repository
 public class UserRepositoryImpl implements IUserRepository{
     private ArrayList<User> users;
 
-    public UserRepositoryImpl() {
-        this.users = this.loadUserJson();
+    public UserRepositoryImpl(){
+        users = this.loadUserJson();
     }
 
     @Override
@@ -38,7 +39,7 @@ public class UserRepositoryImpl implements IUserRepository{
 
     @Override
     public Optional<User> findById(Integer id) {
-        return Optional.empty();
+        return users.stream().filter(user -> user.getUserId().equals(id)).findFirst();
     }
 
     @Override
