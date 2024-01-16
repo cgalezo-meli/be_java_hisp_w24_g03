@@ -3,21 +3,28 @@ package com.socialmeli.socialmeli.services;
 import com.socialmeli.socialmeli.dto.PostDto;
 import com.socialmeli.socialmeli.dto.ProductDto;
 import com.socialmeli.socialmeli.entities.Post;
+import com.socialmeli.socialmeli.entities.User;
 import com.socialmeli.socialmeli.exceptions.BadRequestException;
 import com.socialmeli.socialmeli.mapper.Mapper;
 import com.socialmeli.socialmeli.repositories.PostRepositoryImpl;
+import com.socialmeli.socialmeli.repositories.UserRepositoryImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService implements IPostService{
     private final PostRepositoryImpl postRepository;
 
     private final Mapper mapper;
+    private final UserRepositoryImpl userRepository;
 
-    public PostService(PostRepositoryImpl postRepository, Mapper mapper) {
+    public PostService(PostRepositoryImpl postRepository, UserRepositoryImpl userRepository, Mapper mapper) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
         this.mapper = mapper;
     }
 
@@ -46,6 +53,10 @@ public class PostService implements IPostService{
         if(postDto.user_id() == null || postDto.date() == null || postDto.product() == null || postDto.category() == null
                 || postDto.price() == null){
             throw new BadRequestException("Los datos ingresados no son correctos.");
+        }
+        User user = userRepository.findById(postDto.user_id()).orElse(null);
+        if(Objects.isNull(user)){
+            throw new BadRequestException("No existe el usuario con id: " + postDto.user_id());
         }
 
         Post post = mapper.convertDtoToPost(postDto);
