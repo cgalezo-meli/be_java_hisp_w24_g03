@@ -13,5 +13,6 @@ public interface IUserService {
     List<UserDto> getAllUsers();
     UserDto getTotalFollowers(Integer userId);
     ResponseDto follow(Integer userId, Integer userIdToFollow);
+    ResponseDto unfollow(Integer userId, Integer userIdToFollow);
     UserFollowedDto listFollowed(Integer userId);
 }

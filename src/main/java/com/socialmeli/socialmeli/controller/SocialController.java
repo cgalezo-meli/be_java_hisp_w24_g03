@@ -49,6 +49,12 @@ public class SocialController {
         return ResponseEntity.ok(userService.follow(userId, userIdToFollow));
     }
 
+    @PostMapping("/users/{userId}/unfollow/{userIdToUnfollow}")
+    public ResponseEntity<ResponseDto> unfollow(@PathVariable("userId") Integer userId,
+                                                @PathVariable("userIdToUnfollow") Integer userIdToUnfollow){
+        return ResponseEntity.ok(userService.unfollow(userId, userIdToUnfollow));
+    }
+
     @GetMapping("/users/{userId}/followed/list")
     public ResponseEntity<UserFollowedDto> getAllFollowed(@PathVariable Integer userId) {
         return new ResponseEntity<>(userService.listFollowed(userId), HttpStatus.OK);
