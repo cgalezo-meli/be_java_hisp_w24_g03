@@ -1,5 +1,5 @@
 [
-  {"id":1465,
+  {"user_id":1465,
     "user_name":"usuario1",
     "followers": [
     {
@@ -12,7 +12,7 @@
         "user_name": "usuario3"
       }]
   },
-  {"id":1115,
+  {"user_id":1115,
     "user_name":"usuario3",
     "followers": [],
     "followed": [
@@ -21,7 +21,7 @@
         "user_name": "usuario4"
       }]
   },
-  {"id":4698,
+  {"user_id":4698,
     "user_name":"usuario2",
     "followers": [
       {

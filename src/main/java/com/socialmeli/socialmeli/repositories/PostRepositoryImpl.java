@@ -1,24 +1,32 @@
 package com.socialmeli.socialmeli.repositories;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.socialmeli.socialmeli.entities.Post;
-
+import org.springframework.stereotype.Repository;
+import org.springframework.util.ResourceUtils;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
+@Repository
 public class PostRepositoryImpl implements IPostRepository{
-    ArrayList<Post> posts;
+    private ArrayList<Post> posts;
 
     public PostRepositoryImpl() {
         this.posts = this.loadPostJson();
     }
 
     @Override
-    public Object save(Object o) {
+    public Post save(Post post) {
         return null;
     }
 
     @Override
-    public Object update(Object o) {
+    public Post update(Post post) {
         return null;
     }
 
@@ -34,11 +42,21 @@ public class PostRepositoryImpl implements IPostRepository{
 
     @Override
     public ArrayList<Post> findAll() {
-        return null;
+        return this.posts;
     }
 
     @Override
     public ArrayList<Post> loadPostJson() {
-        return null;
+        ArrayList<Post> data = null;
+        File file;
+        ObjectMapper objectMapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE).registerModule(new JavaTimeModule());
+        TypeReference<ArrayList<Post>> typeReference = new TypeReference<>() {};
+        try {
+            file = ResourceUtils.getFile("classpath:json/post.json");
+            data = objectMapper.readValue(file, typeReference);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return data;
     }
 }
