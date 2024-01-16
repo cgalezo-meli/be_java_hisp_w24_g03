@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface IUserService {
     List<UserDto> getAllUsers();
-    UserDto getTotalFollowers(int userId);
+    UserDto getTotalFollowers(Integer userId);
 
 }

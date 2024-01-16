@@ -13,7 +13,7 @@ public class Mapper {
         return new PostDto(
                 entity.getUserId(),
                 entity.getDate(),
-                convertProductToDto(entity.getProducts()),
+                convertProductToDto(entity.getProduct()),
                 entity.getCategory(),
                 entity.getPrice()
         );
@@ -23,7 +23,7 @@ public class Mapper {
         Post entity = new Post();
         entity.setUserId(postDto.user_id());
         entity.setDate(postDto.date());
-        entity.setProducts(convertDtoToProduct(postDto.product()));
+        entity.setProduct(convertDtoToProduct(postDto.product()));
         entity.setCategory(postDto.category());
         entity.setPrice(postDto.price());
         return entity;
