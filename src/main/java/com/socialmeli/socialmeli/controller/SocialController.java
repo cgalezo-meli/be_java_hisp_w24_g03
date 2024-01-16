@@ -1,11 +1,15 @@
 package com.socialmeli.socialmeli.controller;
 
-import com.socialmeli.socialmeli.dto.UserDto;
+import com.socialmeli.socialmeli.dto.UserFollowedDto;
 import com.socialmeli.socialmeli.services.IUserService;
-import com.socialmeli.socialmeli.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import com.socialmeli.socialmeli.dto.UserDto;
+import com.socialmeli.socialmeli.services.UserService;
+
 import org.springframework.web.bind.annotation.*;
+
 import com.socialmeli.socialmeli.dto.PostDto;
 import com.socialmeli.socialmeli.services.PostService;
 
@@ -13,6 +17,7 @@ import java.util.List;
 
 @RestController
 public class SocialController {
+
     private final UserService userService;
     private final PostService postService;
 
@@ -36,8 +41,14 @@ public class SocialController {
         return new ResponseEntity<>(userService.getTotalFollowers(userId), HttpStatus.OK);
     }
 
+    @GetMapping("/users/{userId}/followed/list")
+    public ResponseEntity<UserFollowedDto> getAllFollowed(@PathVariable Integer userId) {
+        return new ResponseEntity<>(userService.listFollowed(userId), HttpStatus.OK);
+    }
+
     @PostMapping("/products/post")
     public ResponseEntity<?> createPost(@RequestBody PostDto postDto){
         return new ResponseEntity<>(postService.save(postDto), HttpStatus.OK);
     }
 }
+
