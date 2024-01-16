@@ -56,8 +56,8 @@ public class SocialController {
     }
 
     @GetMapping("/users/{userId}/followed/list")
-    public ResponseEntity<UserFollowedDto> getAllFollowed(@PathVariable Integer userId) {
-        return new ResponseEntity<>(userService.listFollowed(userId), HttpStatus.OK);
+    public ResponseEntity<UserFollowedDto> getAllFollowed(@PathVariable Integer userId, @RequestParam String order) {
+        return new ResponseEntity<>(userService.listFollowed(userId, order), HttpStatus.OK);
     }
 
     @PostMapping("/products/post")
