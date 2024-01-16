@@ -67,19 +67,9 @@ public class UserRepositoryImpl implements IUserRepository{
     @Override
     public List<User> listFollowed(Integer userId) {
 
-        User user = userDetails(userId);
+        User user = this.findById(userId).orElse(null);
 
         return (user != null && user.getFollowed() != null) ? user.getFollowed() : new ArrayList<>();
-    }
-
-    @Override
-    public User userDetails(Integer userId) {
-
-        return users.stream()
-                .filter(u -> u.getUserId().equals(userId))
-                .findFirst()
-                .orElse(null);
-
     }
 
 }
