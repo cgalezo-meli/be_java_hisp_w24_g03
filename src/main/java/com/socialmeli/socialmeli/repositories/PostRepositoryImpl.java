@@ -22,6 +22,9 @@ public class PostRepositoryImpl implements IPostRepository{
 
     @Override
     public Post save(Post post) {
+        if(this.posts.add(post)){
+            return post;
+        }
         return null;
     }
 
