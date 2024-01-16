@@ -1,5 +1,6 @@
 package com.socialmeli.socialmeli.repositories;
 
+import com.socialmeli.socialmeli.dto.UserDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -11,6 +12,7 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.List;
 
@@ -61,4 +63,13 @@ public class UserRepositoryImpl implements IUserRepository{
         }
         return data;
     }
+
+    @Override
+    public List<User> listFollowed(Integer userId) {
+
+        User user = this.findById(userId).orElse(null);
+
+        return (user != null && user.getFollowed() != null) ? user.getFollowed() : new ArrayList<>();
+    }
+
 }
