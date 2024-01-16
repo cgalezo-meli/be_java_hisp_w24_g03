@@ -2,9 +2,14 @@ package com.socialmeli.socialmeli.mapper;
 
 import com.socialmeli.socialmeli.dto.PostDto;
 import com.socialmeli.socialmeli.dto.ProductDto;
+import com.socialmeli.socialmeli.dto.UserDto;
 import com.socialmeli.socialmeli.entities.Post;
 import com.socialmeli.socialmeli.entities.Product;
+import com.socialmeli.socialmeli.entities.User;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class Mapper {
@@ -49,5 +54,13 @@ public class Mapper {
         product.setColor(productDto.color());
         product.setNotes(productDto.notes());
         return product;
+    }
+    private UserDto convertToUserDto(User user) {
+        return new UserDto(user.getUserId(), user.getUserName(),0);
+    }
+    public List<UserDto> convertToUserDtoList(List<User> users) {
+        return users.stream()
+                .map(this::convertToUserDto)
+                .collect(Collectors.toList());
     }
 }
