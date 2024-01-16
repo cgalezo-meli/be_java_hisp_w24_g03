@@ -1,14 +1,14 @@
 package com.socialmeli.socialmeli.repositories;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.socialmeli.socialmeli.entities.User;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.socialmeli.socialmeli.entities.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Repository
 public class UserRepositoryImpl implements IUserRepository{
-    ArrayList<User> users;
+    private ArrayList<User> users;
 
     public UserRepositoryImpl(){
         users = this.loadUserJson();
@@ -44,26 +44,21 @@ public class UserRepositoryImpl implements IUserRepository{
 
     @Override
     public ArrayList<User> findAll() {
-        return null;
+        return this.users;
     }
 
-    private ArrayList<User> loadUserJson(){
-        File file = null;
-
+    @Override
+    public ArrayList<User> loadUserJson() {
+        ArrayList<User> data = null;
+        File file;
+        ObjectMapper objectMapper = new ObjectMapper().setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE).registerModule(new JavaTimeModule());
+        TypeReference<ArrayList<User>> typeReference = new TypeReference<>() {};
         try {
-            file= ResourceUtils.getFile("classpath:json/user.json");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-        ArrayList<User> userList = null;
-        TypeReference<ArrayList<User>> typeRef = new TypeReference<>() {};
-        try {
-            userList = objectMapper.readValue(file, typeRef);
+            file = ResourceUtils.getFile("classpath:json/user.json");
+            data = objectMapper.readValue(file, typeReference);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return userList;
+        return data;
     }
 }
