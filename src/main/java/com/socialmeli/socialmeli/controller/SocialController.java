@@ -39,9 +39,9 @@ public class SocialController {
     public ResponseEntity<UserDto> getTotalFollowers(@PathVariable("userId") Integer userId) {
         return new ResponseEntity<>(userService.getTotalFollowers(userId), HttpStatus.OK);
     }
+    @GetMapping("/users/{userId}/followed/list")
+    public ResponseEntity<UserFollowedDto> getAllFollowed(@PathVariable Integer userId){
+        return new ResponseEntity<>(userService.listFollowed(userId), HttpStatus.OK);
+    }
 }
 
-@GetMapping("/users/{userId}/followed/list")
-public ResponseEntity<UserFollowedDto> getAllFollowed(@PathVariable Integer userId){
-    return new ResponseEntity<>(userService.listFollowed(userId), HttpStatus.OK);
-}

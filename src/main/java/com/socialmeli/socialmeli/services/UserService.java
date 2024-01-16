@@ -54,7 +54,7 @@ public class UserService implements IUserService{
     }
 
     private UserDto convertToUserDto(User user) {
-        return new UserDto(user.getUserId(), user.getUserName());
+        return new UserDto(user.getUserId(), user.getUserName(),0);
     }
 
     private List<UserDto> convertToUserDtoList(List<User> users) {
