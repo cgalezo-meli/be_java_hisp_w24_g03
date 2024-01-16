@@ -1,5 +1,7 @@
 package com.socialmeli.socialmeli.controller;
 
+import com.socialmeli.socialmeli.dto.ResponseDto;
+import com.socialmeli.socialmeli.dto.UserDto;
 import com.socialmeli.socialmeli.dto.UserFollowedDto;
 import com.socialmeli.socialmeli.services.IUserService;
 import org.springframework.http.HttpStatus;
@@ -39,6 +41,12 @@ public class SocialController {
     @GetMapping("/users/{userId}/followers/count")
     public ResponseEntity<UserDto> getTotalFollowers(@PathVariable("userId") Integer userId) {
         return new ResponseEntity<>(userService.getTotalFollowers(userId), HttpStatus.OK);
+    }
+
+    @PostMapping("/users/{userId}/follow/{userIdToFollow}")
+    public ResponseEntity<ResponseDto> follow(@PathVariable("userId") Integer userId,
+                                              @PathVariable("userIdToFollow") Integer userIdToFollow) {
+        return ResponseEntity.ok(userService.follow(userId, userIdToFollow));
     }
 
     @GetMapping("/users/{userId}/followed/list")
