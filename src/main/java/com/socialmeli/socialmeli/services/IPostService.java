@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IPostService {
     List<PostDto> getAllPosts();
+    PostDto save(PostDto postDto);
 }
