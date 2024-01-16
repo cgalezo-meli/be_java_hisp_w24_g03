@@ -51,6 +51,22 @@ public class UserService implements IUserService{
         return new ResponseDto("Follow exitoso");
     }
 
+    public ResponseDto unfollow(Integer userId, Integer userIdToFollow) {
+        User user = this.userExists(userId);
+        User userToUnfollow = this.userExists(userIdToFollow);
+
+        // Verify if user isn't a follower of userToUnfollow
+        if (!this.userIsFollowerOf(user, userToUnfollow))
+            throw new BadRequestException("El usuario " + userId + " no sigue al usuario " + userIdToFollow);
+
+        // Remove user as "follower" in userToUnfollow
+        userToUnfollow.getFollowers().remove(user);
+
+        // Remove userToUnfollow as "followed" in user
+        user.getFollowed().remove(userToUnfollow);
+        return new ResponseDto("Unfollow exitoso");
+    }
+
     @Override
     public List<UserDto> getAllUsers() {
         return this.userRepository.findAll().stream().map(
@@ -64,7 +80,7 @@ public class UserService implements IUserService{
     // Verify if user is a follower of userToFollow
     private Boolean userIsFollowerOf(User user, User userToFollow) {
         return user.getFollowed().stream().anyMatch(
-                followed -> followed.getUserId() == userToFollow.getUserId()
+                followed -> followed.getUserId().equals(userToFollow.getUserId())
         );
     }
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public interface IUserService {
     List<UserDto> getAllUsers();
     UserDto getTotalFollowers(Integer userId);
-    ResponseDto follow(Integer userId, Integer userIdToFollow);    
+    ResponseDto follow(Integer userId, Integer userIdToFollow);
+    ResponseDto unfollow(Integer userId, Integer userIdToFollow);
     UserFollowedDto listFollowed(Integer userId, String order);
 }
