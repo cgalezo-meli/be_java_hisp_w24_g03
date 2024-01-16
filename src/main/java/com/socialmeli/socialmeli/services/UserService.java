@@ -2,6 +2,7 @@ package com.socialmeli.socialmeli.services;
 
 import com.socialmeli.socialmeli.dto.UserDto;
 import com.socialmeli.socialmeli.entities.User;
+import com.socialmeli.socialmeli.exceptions.BadRequestException;
 import com.socialmeli.socialmeli.mapper.Mapper;
 import com.socialmeli.socialmeli.repositories.IUserRepository;
 import com.socialmeli.socialmeli.repositories.UserRepositoryImpl;
@@ -25,8 +26,7 @@ public class UserService implements IUserService{
     public UserDto getTotalFollowers(Integer userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (Objects.isNull(user))
-            return null;
-        //devolver error
+            throw new BadRequestException("No se encontro un usuario con el id " + userId);
 
         return new UserDto(userId, user.getUserName(), user.getFollowers().size());
     }
