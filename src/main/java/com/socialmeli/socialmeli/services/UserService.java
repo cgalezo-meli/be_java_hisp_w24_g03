@@ -42,12 +42,28 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public UserFollowedDto listFollowed(Integer userId) {
+    public UserFollowedDto listFollowed(Integer userId, String order) {
 
         User user = userRepository.findById(userId).orElse(null);
         List<User> followed = userRepository.listFollowed(userId);
+        List<UserDto> followedList = sortFollowed(followed,order);
 
-        return new UserFollowedDto(user.getUserId(), user.getUserName(), mapper.convertToUserDtoList(user.getFollowed()));
+        return new UserFollowedDto(user.getUserId(), user.getUserName(), followedList);
     }
 
+    private List<UserDto> sortFollowed(List<User> usersFollowed, String order){
+        switch(order){
+            case "name_asc":
+                return mapper.convertToUserDtoList(usersFollowed.stream()
+                        .sorted(Comparator.comparing(User::getUserName))
+                        .collect(Collectors.toList()));
+            case "name_desc":
+                return mapper.convertToUserDtoList(usersFollowed.stream()
+                        .sorted(Comparator.comparing(User::getUserName).reversed())
+                        .collect(Collectors.toList()));
+            default:
+                return null;
+        }
+    }
+    
 }

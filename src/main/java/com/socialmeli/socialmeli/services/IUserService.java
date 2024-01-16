@@ -12,6 +12,5 @@ public interface IUserService {
     List<UserDto> getAllUsers();
     UserDto getTotalFollowers(Integer userId);
 
-
-    UserFollowedDto listFollowed(Integer userId);
+    UserFollowedDto listFollowed(Integer userId, String order);
 }
