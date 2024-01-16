@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public interface IUserService {
     List<UserDto> getAllUsers();
-    UserDto getTotalFollowers(int userId);
+    UserDto getTotalFollowers(Integer userId);
 
 
     UserFollowedDto listFollowed(Integer userId);

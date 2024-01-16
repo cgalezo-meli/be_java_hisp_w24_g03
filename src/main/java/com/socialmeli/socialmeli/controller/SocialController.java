@@ -26,7 +26,7 @@ public class SocialController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts(){
+    public ResponseEntity<List<PostDto>> getAllPosts() {
         return ResponseEntity.ok(postService.getAllPosts());
     }
 
@@ -36,8 +36,9 @@ public class SocialController {
     }
 
     @GetMapping("/users/{userId}/followers/count")
-    public ResponseEntity<UserDto> getTotalFollowers(@PathVariable Integer userId){
+    public ResponseEntity<UserDto> getTotalFollowers(@PathVariable("userId") Integer userId) {
         return new ResponseEntity<>(userService.getTotalFollowers(userId), HttpStatus.OK);
+    }
 }
 
 @GetMapping("/users/{userId}/followed/list")

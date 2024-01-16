@@ -21,7 +21,7 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public UserDto getTotalFollowers(int userId) {
+    public UserDto getTotalFollowers(Integer userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (Objects.isNull(user))
             return null;
