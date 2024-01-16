@@ -1,10 +1,11 @@
 package com.socialmeli.socialmeli.repositories;
 
 import com.socialmeli.socialmeli.entities.Post;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Optional;
-
+@Repository
 public class PostRepositoryImpl implements IPostRepository{
     ArrayList<Post> posts;
 
