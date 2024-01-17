@@ -76,9 +76,9 @@ public class PostService implements IPostService{
     }
 
     public List<PostDto> sortLastFollowedPost(List<PostDto> posts, String order){
-        if(order.equals("name_asc"))
+        if(order.equals("date_asc"))
             return posts.stream().sorted(Comparator.comparing(PostDto::date)).toList() ;
-        if(order.equals("name_desc"))
+        if(order.equals("date_desc"))
             return posts.stream().sorted(Comparator.comparing(PostDto::date).reversed()).toList();
 
         throw new BadRequestException("Debe ingresar un orden valido, como name_asc o name_desc");
