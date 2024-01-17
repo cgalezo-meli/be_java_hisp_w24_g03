@@ -2,6 +2,7 @@ package com.socialmeli.socialmeli.services;
 
 import com.socialmeli.socialmeli.dto.ResponseDto;
 import com.socialmeli.socialmeli.dto.UserDto;
+import com.socialmeli.socialmeli.dto.UserFollowersDto;
 import com.socialmeli.socialmeli.entities.User;
 import com.socialmeli.socialmeli.exceptions.BadRequestException;
 import com.socialmeli.socialmeli.exceptions.NotFoundException;
@@ -25,12 +26,12 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public UserDto getTotalFollowers(Integer userId) {
+    public UserFollowersDto getTotalFollowers(Integer userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (Objects.isNull(user))
             throw new NotFoundException("No se encontro un usuario con el id " + userId);
 
-        return new UserDto(userId, user.getUserName(), user.getFollowers().size());
+        return new UserFollowersDto(userId, user.getUserName(), user.getFollowers().size());
     }
 
     @Override
@@ -69,12 +70,7 @@ public class UserService implements IUserService{
 
     @Override
     public List<UserDto> getAllUsers() {
-        return this.userRepository.findAll().stream().map(
-                user -> new UserDto(
-                        user.getUserId(),
-                        user.getUserName(),
-                        user.getFollowers().size())
-        ).toList();
+        return this.userRepository.findAll().stream().map(mapper::convertToUserDto).toList();
     }
 
     // Verify if user is a follower of userToFollow
