@@ -35,7 +35,7 @@ public class UserService implements IUserService{
     @Override
     public UserFollowerDto getFollowers(Integer userId, String order) {
         User user = userRepository.findById(userId).orElse(null);
-        System.out.println(user.getUserId()+"HOLAAA");
+
         if (Objects.isNull(user)){
             throw new BadRequestException("Usuario no existe.");
         }

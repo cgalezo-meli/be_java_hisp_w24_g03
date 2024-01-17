@@ -38,7 +38,7 @@ public class SocialController {
     }
 
     @GetMapping("/users/{userId}/followers/list")
-    public ResponseEntity<UserFollowerDto> getFollowers(@PathVariable("userId") Integer userId, @RequestParam("order") String order) {
+    public ResponseEntity<UserFollowerDto> getFollowers(@PathVariable("userId") Integer userId, @RequestParam(value = "order",required = false) String order) {
         return new ResponseEntity<>(userService.getFollowers(userId,order), HttpStatus.OK);
     }
 
