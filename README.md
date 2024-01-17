@@ -117,7 +117,7 @@ List of all users following a specific seller.
 List of all the sellers followed by a specific user.
 
 ```http
-  GET /users/{userId}/followers/list
+  GET /users/{userId}/followed/list
 
 ```
 
@@ -357,4 +357,4 @@ To run tests, use the postman collection located in the following directory:
 
 ## Acknowledgements
 
-Gratitude to the [Playground Digital House](https://playground.digitalhouse.com/) team and [Mercado Libre](https://mercadolibre.com/) for allowing us to learn every day.ç
+Gratitude to the [Playground Digital House](https://playground.digitalhouse.com/) team and [Mercado Libre](https://mercadolibre.com/) for allowing us to learn every day.
