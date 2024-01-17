@@ -343,7 +343,7 @@ Ordered list of posts made by the sellers that a user follows in the last two we
 To run tests, use the postman collection located in the following directory:
 
 ```bash
-  /src/main/resources/postman
+  /src/main/resources/collectionPostman
 ```
 
 ## Authors
