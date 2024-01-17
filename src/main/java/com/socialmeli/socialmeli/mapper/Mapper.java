@@ -56,8 +56,10 @@ public class Mapper {
         return product;
     }
 
-    private UserDto convertToUserDto(User user) {
-        return new UserDto(user.getUserId(), user.getUserName(),0);
+    public UserDto convertToUserDto(User user) {
+        return new UserDto(
+                user.getUserId(),
+                user.getUserName());
     }
 
     public List<UserDto> convertToUserDtoList(List<User> users) {
