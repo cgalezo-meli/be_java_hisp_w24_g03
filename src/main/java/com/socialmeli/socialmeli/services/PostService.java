@@ -7,6 +7,7 @@ import com.socialmeli.socialmeli.dto.UserFollowedPostsDto;
 import com.socialmeli.socialmeli.entities.Post;
 import com.socialmeli.socialmeli.entities.User;
 import com.socialmeli.socialmeli.exceptions.BadRequestException;
+import com.socialmeli.socialmeli.exceptions.NotFoundException;
 import com.socialmeli.socialmeli.mapper.Mapper;
 import com.socialmeli.socialmeli.repositories.PostRepositoryImpl;
 import com.socialmeli.socialmeli.repositories.UserRepositoryImpl;
@@ -53,23 +54,16 @@ public class PostService implements IPostService{
     }
 
     @Override
-    public List<PostDto> sortDateAsc(List<PostDto> postsDtoList){
-        return postsDtoList.stream().sorted(Comparator.comparing(PostDto::date)).toList();
-    }
-
-    @Override
-    public List<PostDto> sortDateDesc(List<PostDto> postsDtoList){
-        return postsDtoList.stream().sorted(Comparator.comparing(PostDto::date).reversed()).toList();
-    }
-
-    @Override
     public List<PostDto> getUserPosts(Integer userId){
         return this.postRepository.findAll().stream().filter(post -> post.getUserId().equals(userId)).map(mapper::convertPostToDto).toList();
     }
 
 
     @Override
-    public UserFollowedPostsDto getLastTwoWeeksFollowedPosts(Integer userId, List<UserDto> followedList){
+    public UserFollowedPostsDto getLastTwoWeeksFollowedPosts(Integer userId, List<UserDto> followedList, String order){
+        if(postRepository.findById(userId).isEmpty())
+            throw new NotFoundException("No se encontraron post del usuario " + userId);
+
         List<PostDto> allFollowedPosts = new ArrayList<>();
 
         for (UserDto userDto : followedList){
@@ -78,7 +72,16 @@ public class PostService implements IPostService{
 
         LocalDate currentDate = LocalDate.now();
 
-        return new UserFollowedPostsDto(userId, this.sortDateDesc(allFollowedPosts).stream().filter(post -> ChronoUnit.DAYS.between(post.date(),currentDate)<=14).toList()) ;
+        return new UserFollowedPostsDto(userId, sortLastFollowedPost(allFollowedPosts.stream().filter(post -> ChronoUnit.DAYS.between(post.date(),currentDate)<=14).toList(), order)) ;
+    }
+
+    public List<PostDto> sortLastFollowedPost(List<PostDto> posts, String order){
+        if(order.equals("name_asc"))
+            return posts.stream().sorted(Comparator.comparing(PostDto::date)).toList() ;
+        if(order.equals("name_desc"))
+            return posts.stream().sorted(Comparator.comparing(PostDto::date).reversed()).toList();
+
+        throw new BadRequestException("Debe ingresar un orden valido, como name_asc o name_desc");
     }
 
 }
