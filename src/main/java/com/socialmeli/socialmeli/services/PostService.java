@@ -33,22 +33,7 @@ public class PostService implements IPostService{
 
     @Override
     public List<PostDto> getAllPosts() {
-        return this.postRepository.findAll().stream().map(
-                post -> new PostDto(
-                        post.getUserId(),
-                        post.getDate(),
-                        new ProductDto(
-                                post.getProduct().getProductId(),
-                                post.getProduct().getProductName(),
-                                post.getProduct().getType(),
-                                post.getProduct().getBrand(),
-                                post.getProduct().getColor(),
-                                post.getProduct().getNotes()
-                        ),
-                        post.getCategory(),
-                        post.getPrice()
-                )
-        ).toList();
+        return this.postRepository.findAll().stream().map(mapper::convertPostToDto).toList();
     }
 
     @Override
@@ -79,22 +64,7 @@ public class PostService implements IPostService{
 
     @Override
     public List<PostDto> getUserPosts(Integer userId){
-        return this.postRepository.findAll().stream().filter(post -> post.getUserId().equals(userId)).map(
-                post -> new PostDto(
-                        post.getUserId(),
-                        post.getDate(),
-                        new ProductDto(
-                                post.getProduct().getProductId(),
-                                post.getProduct().getProductName(),
-                                post.getProduct().getType(),
-                                post.getProduct().getBrand(),
-                                post.getProduct().getColor(),
-                                post.getProduct().getNotes()
-                        ),
-                        post.getCategory(),
-                        post.getPrice()
-                )
-        ).toList();
+        return this.postRepository.findAll().stream().filter(post -> post.getUserId().equals(userId)).map(mapper::convertPostToDto).toList();
     }
 
 
