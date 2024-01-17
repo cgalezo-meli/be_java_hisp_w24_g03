@@ -99,6 +99,8 @@ public class UserService implements IUserService{
         User user = userRepository.findById(userId).orElse(null);
         List<User> followed = userRepository.listFollowed(userId);
         List<UserDto> followedList = sortFollowed(followed,order);
+        if (Objects.isNull(user))
+            throw new BadRequestException("No se encontro un usuario con el id " + userId);
 
         return new UserFollowedDto(user.getUserId(), user.getUserName(), followedList);
     }
@@ -117,5 +119,5 @@ public class UserService implements IUserService{
                 return null;
         }
     }
-    
+
 }
