@@ -40,7 +40,7 @@ public class PostRepositoryImpl implements IPostRepository{
 
     @Override
     public Optional<Post> findById(Integer id) {
-        return Optional.empty();
+        return posts.stream().filter(post -> post.getUserId().equals(id)).findFirst();
     }
 
     @Override
