@@ -1,6 +1,7 @@
 package com.socialmeli.socialmeli.mapper;
 
 import com.socialmeli.socialmeli.dto.PostDto;
+import com.socialmeli.socialmeli.dto.PostIdDto;
 import com.socialmeli.socialmeli.dto.ProductDto;
 import com.socialmeli.socialmeli.dto.UserDto;
 import com.socialmeli.socialmeli.entities.Post;
@@ -17,6 +18,17 @@ public class Mapper {
     public PostDto convertPostToDto(Post entity){
         return new PostDto(
                 entity.getUserId(),
+                entity.getDate(),
+                convertProductToDto(entity.getProduct()),
+                entity.getCategory(),
+                entity.getPrice()
+        );
+    }
+
+    public PostIdDto convertPostToDtoWithId(Post entity){
+        return new PostIdDto(
+                entity.getUserId(),
+                entity.getPostId(),
                 entity.getDate(),
                 convertProductToDto(entity.getProduct()),
                 entity.getCategory(),

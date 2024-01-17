@@ -54,7 +54,7 @@
     "date": "15-01-2024",
     "product": {
       "product_id": 2,
-      "productName": "Silla Oficina",
+      "product_name": "Silla Oficina",
       "type": "Oficina",
       "brand": "Oficina",
       "color": "Black",
@@ -105,7 +105,7 @@
     "date": "16-01-2024",
     "product": {
       "product_id": 7,
-      "productName": "Mochila",
+      "product_name": "Mochila",
       "type": "",
       "brand": "Everlast",
       "color": "Blue",
