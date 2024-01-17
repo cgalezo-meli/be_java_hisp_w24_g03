@@ -46,8 +46,6 @@ public class SocialController {
         return new ResponseEntity<>(userService.getFollowers(userId,order), HttpStatus.OK);
     }
 
-}
-
     @PostMapping("/users/{userId}/follow/{userIdToFollow}")
     public ResponseEntity<ResponseDto> follow(@PathVariable("userId") Integer userId,
                                               @PathVariable("userIdToFollow") Integer userIdToFollow) {

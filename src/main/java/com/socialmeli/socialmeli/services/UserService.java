@@ -1,8 +1,6 @@
 package com.socialmeli.socialmeli.services;
 
-import com.socialmeli.socialmeli.dto.ResponseDto;
-import com.socialmeli.socialmeli.dto.UserDto;
-import com.socialmeli.socialmeli.dto.UserFollowersDto;
+import com.socialmeli.socialmeli.dto.*;
 import com.socialmeli.socialmeli.entities.User;
 import com.socialmeli.socialmeli.exceptions.BadRequestException;
 import com.socialmeli.socialmeli.mapper.Mapper;
@@ -11,10 +9,12 @@ import com.socialmeli.socialmeli.exceptions.NotFoundException;
 import com.socialmeli.socialmeli.mapper.Mapper;
 import com.socialmeli.socialmeli.repositories.IUserRepository;
 import com.socialmeli.socialmeli.repositories.UserRepositoryImpl;
-import com.socialmeli.socialmeli.dto.UserFollowerDto;
 import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements IUserService{
