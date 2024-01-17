@@ -3,6 +3,7 @@ package com.socialmeli.socialmeli.controller;
 import com.socialmeli.socialmeli.dto.ResponseDto;
 import com.socialmeli.socialmeli.dto.UserDto;
 import com.socialmeli.socialmeli.dto.UserFollowedDto;
+import com.socialmeli.socialmeli.dto.UserFollowedPostsDto;
 import com.socialmeli.socialmeli.services.IUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import com.socialmeli.socialmeli.dto.PostDto;
 import com.socialmeli.socialmeli.services.PostService;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -63,6 +67,13 @@ public class SocialController {
     @PostMapping("/products/post")
     public ResponseEntity<?> createPost(@RequestBody PostDto postDto){
         return new ResponseEntity<>(postService.save(postDto), HttpStatus.OK);
+    }
+
+    @GetMapping("/products/followed/{userId}/list")
+    public ResponseEntity<UserFollowedPostsDto> getLastTwoWeeksFollowedPosts(@PathVariable Integer userId){
+        List<UserDto> followedList = userService.listFollowed(userId,"name_asc").followed();
+
+        return new ResponseEntity<>(postService.getLastTwoWeeksFollowedPosts(userId, followedList), HttpStatus.OK);
     }
 }
 
