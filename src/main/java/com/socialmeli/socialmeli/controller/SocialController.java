@@ -27,7 +27,7 @@ public class SocialController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts() {
+    public ResponseEntity<List<PostIdDto>> getAllPosts() {
         return ResponseEntity.ok(postService.getAllPosts());
     }
 

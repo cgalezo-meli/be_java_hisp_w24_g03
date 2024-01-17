@@ -1,9 +1,6 @@
 package com.socialmeli.socialmeli.services;
 
-import com.socialmeli.socialmeli.dto.PostDto;
-import com.socialmeli.socialmeli.dto.ProductDto;
-import com.socialmeli.socialmeli.dto.UserDto;
-import com.socialmeli.socialmeli.dto.UserFollowedPostsDto;
+import com.socialmeli.socialmeli.dto.*;
 import com.socialmeli.socialmeli.entities.Post;
 import com.socialmeli.socialmeli.entities.User;
 import com.socialmeli.socialmeli.exceptions.BadRequestException;
@@ -19,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+
 @Service
 public class PostService implements IPostService{
     private final PostRepositoryImpl postRepository;
@@ -33,12 +32,12 @@ public class PostService implements IPostService{
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-        return this.postRepository.findAll().stream().map(mapper::convertPostToDto).toList();
+    public List<PostIdDto> getAllPosts() {
+        return this.postRepository.findAll().stream().map(mapper::convertPostToDtoWithId).toList();
     }
 
     @Override
-    public PostDto save(PostDto postDto) {
+    public PostIdDto save(PostDto postDto) {
         if(postDto.user_id() == null || postDto.date() == null || postDto.product() == null || postDto.category() == null
                 || postDto.price() == null){
             throw new BadRequestException("Los datos ingresados no son correctos.");
@@ -47,10 +46,11 @@ public class PostService implements IPostService{
         if(Objects.isNull(user)){
             throw new BadRequestException("No existe el usuario con id: " + postDto.user_id());
         }
-
         Post post = mapper.convertDtoToPost(postDto);
-        var postList = postRepository.save(post);
-        return mapper.convertPostToDto((Post) postList);
+        Integer postId = postRepository.findAll().stream().map(node -> node.getPostId()).max(Integer::compareTo).orElse(0);
+        var postWithId = new Post(post.getUserId(), postId+1, post.getDate(), post.getProduct(), post.getCategory(), post.getPrice());
+        var postList = postRepository.save(postWithId);
+        return mapper.convertPostToDtoWithId(postList);
     }
 
     @Override
