@@ -2,6 +2,8 @@ package com.socialmeli.socialmeli.services;
 
 import com.socialmeli.socialmeli.dto.PostDto;
 import com.socialmeli.socialmeli.dto.ProductDto;
+import com.socialmeli.socialmeli.dto.UserDto;
+import com.socialmeli.socialmeli.dto.UserFollowedPostsDto;
 import com.socialmeli.socialmeli.entities.Post;
 import com.socialmeli.socialmeli.entities.User;
 import com.socialmeli.socialmeli.exceptions.BadRequestException;
@@ -10,6 +12,9 @@ import com.socialmeli.socialmeli.repositories.PostRepositoryImpl;
 import com.socialmeli.socialmeli.repositories.UserRepositoryImpl;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -28,22 +33,7 @@ public class PostService implements IPostService{
 
     @Override
     public List<PostDto> getAllPosts() {
-        return this.postRepository.findAll().stream().map(
-                post -> new PostDto(
-                        post.getUserId(),
-                        post.getDate(),
-                        new ProductDto(
-                                post.getProduct().getProductId(),
-                                post.getProduct().getProductName(),
-                                post.getProduct().getType(),
-                                post.getProduct().getBrand(),
-                                post.getProduct().getColor(),
-                                post.getProduct().getNotes()
-                        ),
-                        post.getCategory(),
-                        post.getPrice()
-                )
-        ).toList();
+        return this.postRepository.findAll().stream().map(mapper::convertPostToDto).toList();
     }
 
     @Override
@@ -74,21 +64,21 @@ public class PostService implements IPostService{
 
     @Override
     public List<PostDto> getUserPosts(Integer userId){
-        return this.postRepository.findAll().stream().filter(post -> post.getUserId().equals(userId)).map(
-                post -> new PostDto(
-                        post.getUserId(),
-                        post.getDate(),
-                        new ProductDto(
-                                post.getProduct().getProductId(),
-                                post.getProduct().getProductName(),
-                                post.getProduct().getType(),
-                                post.getProduct().getBrand(),
-                                post.getProduct().getColor(),
-                                post.getProduct().getNotes()
-                        ),
-                        post.getCategory(),
-                        post.getPrice()
-                )
-        ).toList();
+        return this.postRepository.findAll().stream().filter(post -> post.getUserId().equals(userId)).map(mapper::convertPostToDto).toList();
     }
+
+
+    @Override
+    public UserFollowedPostsDto getLastTwoWeeksFollowedPosts(Integer userId, List<UserDto> followedList){
+        List<PostDto> allFollowedPosts = new ArrayList<>();
+
+        for (UserDto userDto : followedList){
+            allFollowedPosts.addAll(this.getUserPosts(userDto.user_id()));
+        }
+
+        LocalDate currentDate = LocalDate.now();
+
+        return new UserFollowedPostsDto(userId, this.sortDateDesc(allFollowedPosts).stream().filter(post -> ChronoUnit.DAYS.between(post.date(),currentDate)<=14).toList()) ;
+    }
+
 }

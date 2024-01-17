@@ -72,16 +72,8 @@ public class SocialController {
     @GetMapping("/products/followed/{userId}/list")
     public ResponseEntity<UserFollowedPostsDto> getLastTwoWeeksFollowedPosts(@PathVariable Integer userId){
         List<UserDto> followedList = userService.listFollowed(userId,"name_asc").followed();
-        List<PostDto> allFollowedPosts = new ArrayList<>();
 
-        for (UserDto userDto : followedList){
-            allFollowedPosts.addAll(postService.getUserPosts(userDto.user_id()));
-        }
-
-        LocalDate currentDate = LocalDate.now();
-
-        List<PostDto> lastTwoWeeksFollowedPosts = postService.sortDateDesc(allFollowedPosts).stream().filter(post -> ChronoUnit.DAYS.between(post.date(),currentDate)<=14).toList();
-        return new ResponseEntity<>(new UserFollowedPostsDto(userId, lastTwoWeeksFollowedPosts), HttpStatus.OK);
+        return new ResponseEntity<>(postService.getLastTwoWeeksFollowedPosts(userId, followedList), HttpStatus.OK);
     }
 }
 
