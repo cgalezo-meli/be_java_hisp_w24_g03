@@ -2,13 +2,17 @@ package com.socialmeli.socialmeli.controller;
 
 import com.socialmeli.socialmeli.dto.UserDto;
 import com.socialmeli.socialmeli.dto.UserFollowerDto;
+import com.socialmeli.socialmeli.dto.*;
 import com.socialmeli.socialmeli.services.IUserService;
-import com.socialmeli.socialmeli.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.socialmeli.socialmeli.dto.PostDto;
+import com.socialmeli.socialmeli.dto.UserDto;
+import com.socialmeli.socialmeli.services.UserService;
+import org.springframework.web.bind.annotation.*;
 import com.socialmeli.socialmeli.services.PostService;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -33,7 +37,7 @@ public class SocialController {
     }
 
     @GetMapping("/users/{userId}/followers/count")
-    public ResponseEntity<UserDto> getTotalFollowers(@PathVariable("userId") Integer userId) {
+    public ResponseEntity<UserFollowersDto> getTotalFollowers(@PathVariable("userId") Integer userId) {
         return new ResponseEntity<>(userService.getTotalFollowers(userId), HttpStatus.OK);
     }
 
@@ -43,3 +47,34 @@ public class SocialController {
     }
 
 }
+
+    @PostMapping("/users/{userId}/follow/{userIdToFollow}")
+    public ResponseEntity<ResponseDto> follow(@PathVariable("userId") Integer userId,
+                                              @PathVariable("userIdToFollow") Integer userIdToFollow) {
+        return ResponseEntity.ok(userService.follow(userId, userIdToFollow));
+    }
+
+    @PostMapping("/users/{userId}/unfollow/{userIdToUnfollow}")
+    public ResponseEntity<ResponseDto> unfollow(@PathVariable("userId") Integer userId,
+                                                @PathVariable("userIdToUnfollow") Integer userIdToUnfollow){
+        return ResponseEntity.ok(userService.unfollow(userId, userIdToUnfollow));
+    }
+
+    @GetMapping("/users/{userId}/followed/list")
+    public ResponseEntity<UserFollowedDto> getAllFollowed(@PathVariable Integer userId, @RequestParam String order) {
+        return new ResponseEntity<>(userService.listFollowed(userId, order), HttpStatus.OK);
+    }
+
+    @PostMapping("/products/post")
+    public ResponseEntity<?> createPost(@RequestBody PostDto postDto){
+        return new ResponseEntity<>(postService.save(postDto), HttpStatus.OK);
+    }
+
+    @GetMapping("/products/followed/{userId}/list")
+    public ResponseEntity<UserFollowedPostsDto> getLastTwoWeeksFollowedPosts(@PathVariable Integer userId){
+        List<UserDto> followedList = userService.listFollowed(userId,"name_asc").followed();
+
+        return new ResponseEntity<>(postService.getLastTwoWeeksFollowedPosts(userId, followedList), HttpStatus.OK);
+    }
+}
+
