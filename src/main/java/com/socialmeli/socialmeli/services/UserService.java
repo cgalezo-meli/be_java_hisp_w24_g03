@@ -27,6 +27,9 @@ public class UserService implements IUserService{
 
     @Override
     public UserFollowersDto getTotalFollowers(Integer userId) {
+        if(Objects.isNull(userId))
+            throw new BadRequestException("No ingreso correctamente el paramentro userId");
+
         User user = userRepository.findById(userId).orElse(null);
         if (Objects.isNull(user))
             throw new NotFoundException("No se encontro un usuario con el id " + userId);
@@ -36,6 +39,12 @@ public class UserService implements IUserService{
 
     @Override
     public ResponseDto follow(Integer userId, Integer userIdToFollow) {
+        if(Objects.isNull(userId))
+            throw new BadRequestException("No ingreso correctamente el paramentro userId");
+
+        if(Objects.isNull(userIdToFollow))
+            throw new BadRequestException("No ingreso correctamente el paramentro userIdToFollow");
+
         User user = this.userExists(userId);
         User userToFollow = this.userExists(userIdToFollow);
 
@@ -73,7 +82,7 @@ public class UserService implements IUserService{
         User user = userRepository.findById(userId).orElse(null);
 
         if (Objects.isNull(user)){
-            throw new BadRequestException("Usuario no existe.");
+            throw new BadRequestException("El usuario "  + userId +  " no existe.");
         }
         List<UserDto> followerList = sortFollower(user.getFollowers(),order);
 
@@ -90,8 +99,10 @@ public class UserService implements IUserService{
                 return mapper.convertToUserDtoList(usersFollower.stream()
                         .sorted(Comparator.comparing(User::getUserName).reversed())
                         .collect(Collectors.toList()));
-            default:
+            case "default":
                 return mapper.convertToUserDtoList(usersFollower);
+            default:
+                throw new BadRequestException("Orden invalido");
         }
     }
 
@@ -141,8 +152,10 @@ public class UserService implements IUserService{
                 return mapper.convertToUserDtoList(usersFollowed.stream()
                         .sorted(Comparator.comparing(User::getUserName).reversed())
                         .collect(Collectors.toList()));
+            case "default":
+                return mapper.convertToUserDtoList(usersFollowed);
             default:
-                return null;
+                throw new BadRequestException("Orden invalido");
         }
     }
 

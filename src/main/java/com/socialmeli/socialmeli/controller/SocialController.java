@@ -42,7 +42,7 @@ public class SocialController {
     }
 
     @GetMapping("/users/{userId}/followers/list")
-    public ResponseEntity<UserFollowerDto> getFollowers(@PathVariable("userId") Integer userId, @RequestParam(value = "order",required = false) String order) {
+    public ResponseEntity<UserFollowerDto> getFollowers(@PathVariable("userId") Integer userId, @RequestParam(defaultValue = "default", value = "order",required = false) String order) {
         return new ResponseEntity<>(userService.getFollowers(userId,order), HttpStatus.OK);
     }
 
@@ -59,7 +59,7 @@ public class SocialController {
     }
 
     @GetMapping("/users/{userId}/followed/list")
-    public ResponseEntity<UserFollowedDto> getAllFollowed(@PathVariable("userId") Integer userId, @RequestParam String order) {
+    public ResponseEntity<UserFollowedDto> getAllFollowed(@PathVariable("userId") Integer userId, @RequestParam(defaultValue = "default", value = "order",required = false) String order) {
         return new ResponseEntity<>(userService.listFollowed(userId, order), HttpStatus.OK);
     }
 
@@ -69,7 +69,7 @@ public class SocialController {
     }
 
     @GetMapping("/products/followed/{userId}/list")
-    public ResponseEntity<UserFollowedPostsDto> getLastTwoWeeksFollowedPosts(@PathVariable("userId") Integer userId, @RequestParam(defaultValue = "name_desc") String order){
+    public ResponseEntity<UserFollowedPostsDto> getLastTwoWeeksFollowedPosts(@PathVariable("userId") Integer userId, @RequestParam(defaultValue = "date_desc", required = false) String order){
         List<UserDto> followedList = userService.listFollowed(userId,"name_asc").followed();
 
         return new ResponseEntity<>(postService.getLastTwoWeeksFollowedPosts(userId, followedList, order), HttpStatus.OK);
