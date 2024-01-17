@@ -1,18 +1,19 @@
 package com.socialmeli.socialmeli.services;
 
-import com.socialmeli.socialmeli.dto.ResponseDto;
-import com.socialmeli.socialmeli.dto.UserDto;
+import com.socialmeli.socialmeli.dto.*;
 import com.socialmeli.socialmeli.entities.User;
+import com.socialmeli.socialmeli.exceptions.BadRequestException;
+import com.socialmeli.socialmeli.mapper.Mapper;
 import com.socialmeli.socialmeli.exceptions.BadRequestException;
 import com.socialmeli.socialmeli.exceptions.NotFoundException;
 import com.socialmeli.socialmeli.mapper.Mapper;
 import com.socialmeli.socialmeli.repositories.IUserRepository;
 import com.socialmeli.socialmeli.repositories.UserRepositoryImpl;
-import com.socialmeli.socialmeli.dto.UserFollowedDto;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,12 +26,12 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public UserDto getTotalFollowers(Integer userId) {
+    public UserFollowersDto getTotalFollowers(Integer userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (Objects.isNull(user))
             throw new NotFoundException("No se encontro un usuario con el id " + userId);
 
-        return new UserDto(userId, user.getUserName(), user.getFollowers().size());
+        return new UserFollowersDto(userId, user.getUserName(), user.getFollowers().size());
     }
 
     @Override
@@ -68,13 +69,35 @@ public class UserService implements IUserService{
     }
 
     @Override
+    public UserFollowerDto getFollowers(Integer userId, String order) {
+        User user = userRepository.findById(userId).orElse(null);
+
+        if (Objects.isNull(user)){
+            throw new BadRequestException("Usuario no existe.");
+        }
+        List<UserDto> followerList = sortFollower(user.getFollowers(),order);
+
+        return new UserFollowerDto(user.getUserId(), user.getUserName(), followerList);
+    }
+
+    private List<UserDto> sortFollower(List<User> usersFollower, String order){
+        switch(order){
+            case "name_asc":
+                return mapper.convertToUserDtoList(usersFollower.stream()
+                        .sorted(Comparator.comparing(User::getUserName))
+                        .collect(Collectors.toList()));
+            case "name_desc":
+                return mapper.convertToUserDtoList(usersFollower.stream()
+                        .sorted(Comparator.comparing(User::getUserName).reversed())
+                        .collect(Collectors.toList()));
+            default:
+                return mapper.convertToUserDtoList(usersFollower);
+        }
+    }
+
+    @Override
     public List<UserDto> getAllUsers() {
-        return this.userRepository.findAll().stream().map(
-                user -> new UserDto(
-                        user.getUserId(),
-                        user.getUserName(),
-                        user.getFollowers().size())
-        ).toList();
+        return this.userRepository.findAll().stream().map(mapper::convertToUserDto).toList();
     }
 
     // Verify if user is a follower of userToFollow

@@ -1,29 +1,23 @@
 package com.socialmeli.socialmeli.controller;
 
-import com.socialmeli.socialmeli.dto.ResponseDto;
 import com.socialmeli.socialmeli.dto.UserDto;
-import com.socialmeli.socialmeli.dto.UserFollowedDto;
-import com.socialmeli.socialmeli.dto.UserFollowedPostsDto;
+import com.socialmeli.socialmeli.dto.UserFollowerDto;
+import com.socialmeli.socialmeli.dto.*;
 import com.socialmeli.socialmeli.services.IUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.web.bind.annotation.*;
+import com.socialmeli.socialmeli.dto.PostDto;
 import com.socialmeli.socialmeli.dto.UserDto;
 import com.socialmeli.socialmeli.services.UserService;
-
 import org.springframework.web.bind.annotation.*;
-
-import com.socialmeli.socialmeli.dto.PostDto;
 import com.socialmeli.socialmeli.services.PostService;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class SocialController {
-
     private final UserService userService;
     private final PostService postService;
 
@@ -43,8 +37,13 @@ public class SocialController {
     }
 
     @GetMapping("/users/{userId}/followers/count")
-    public ResponseEntity<UserDto> getTotalFollowers(@PathVariable("userId") Integer userId) {
+    public ResponseEntity<UserFollowersDto> getTotalFollowers(@PathVariable("userId") Integer userId) {
         return new ResponseEntity<>(userService.getTotalFollowers(userId), HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{userId}/followers/list")
+    public ResponseEntity<UserFollowerDto> getFollowers(@PathVariable("userId") Integer userId, @RequestParam(value = "order",required = false) String order) {
+        return new ResponseEntity<>(userService.getFollowers(userId,order), HttpStatus.OK);
     }
 
     @PostMapping("/users/{userId}/follow/{userIdToFollow}")
