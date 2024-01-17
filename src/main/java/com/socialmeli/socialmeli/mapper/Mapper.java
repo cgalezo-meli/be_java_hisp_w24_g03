@@ -55,16 +55,15 @@ public class Mapper {
         product.setNotes(productDto.notes());
         return product;
     }
+    public List<UserDto> convertToUserDtoList(List<User> users) {
+        return users.stream()
+                .map(this::convertToUserDto)
+                .collect(Collectors.toList());
+    }
 
     public UserDto convertToUserDto(User user) {
         return new UserDto(
                 user.getUserId(),
                 user.getUserName());
-    }
-
-    public List<UserDto> convertToUserDtoList(List<User> users) {
-        return users.stream()
-                .map(this::convertToUserDto)
-                .collect(Collectors.toList());
     }
 }
