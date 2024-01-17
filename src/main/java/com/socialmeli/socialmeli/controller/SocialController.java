@@ -1,5 +1,7 @@
 package com.socialmeli.socialmeli.controller;
 
+import com.socialmeli.socialmeli.dto.ResponseDto;
+import com.socialmeli.socialmeli.dto.UserDto;
 import com.socialmeli.socialmeli.dto.UserFollowedDto;
 import com.socialmeli.socialmeli.dto.UserFollowedPostsDto;
 import com.socialmeli.socialmeli.services.IUserService;
@@ -45,9 +47,21 @@ public class SocialController {
         return new ResponseEntity<>(userService.getTotalFollowers(userId), HttpStatus.OK);
     }
 
+    @PostMapping("/users/{userId}/follow/{userIdToFollow}")
+    public ResponseEntity<ResponseDto> follow(@PathVariable("userId") Integer userId,
+                                              @PathVariable("userIdToFollow") Integer userIdToFollow) {
+        return ResponseEntity.ok(userService.follow(userId, userIdToFollow));
+    }
+
+    @PostMapping("/users/{userId}/unfollow/{userIdToUnfollow}")
+    public ResponseEntity<ResponseDto> unfollow(@PathVariable("userId") Integer userId,
+                                                @PathVariable("userIdToUnfollow") Integer userIdToUnfollow){
+        return ResponseEntity.ok(userService.unfollow(userId, userIdToUnfollow));
+    }
+
     @GetMapping("/users/{userId}/followed/list")
-    public ResponseEntity<UserFollowedDto> getAllFollowed(@PathVariable Integer userId) {
-        return new ResponseEntity<>(userService.listFollowed(userId), HttpStatus.OK);
+    public ResponseEntity<UserFollowedDto> getAllFollowed(@PathVariable Integer userId, @RequestParam String order) {
+        return new ResponseEntity<>(userService.listFollowed(userId, order), HttpStatus.OK);
     }
 
     @PostMapping("/products/post")
@@ -57,7 +71,7 @@ public class SocialController {
 
     @GetMapping("/products/followed/{userId}/list")
     public ResponseEntity<UserFollowedPostsDto> getLastTwoWeeksFollowedPosts(@PathVariable Integer userId){
-        List<UserDto> followedList = userService.listFollowed(userId).followed();
+        List<UserDto> followedList = userService.listFollowed(userId,"name_asc").followed();
         List<PostDto> allFollowedPosts = new ArrayList<>();
 
         for (UserDto userDto : followedList){
