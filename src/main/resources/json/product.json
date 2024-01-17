@@ -5,7 +5,7 @@
   "color": "Red & Black",
   "notes": "Special Edition"
  },
-  {"product_id": 62,
+  {"product_id": 2,
     "product_name": "Headset RGB Inalámbrico",
     "type": "Gamer",
     "brand": "Razer",
@@ -18,5 +18,36 @@
     "brand": "Apple",
     "color": "Gray",
     "notes": "Microprocesador M1"
+  },
+  {
+  "product_id": 2,
+  "productName": "Silla Oficina",
+  "type": "Oficina",
+  "brand": "Oficina",
+  "color": "Black",
+  "notes": "Special Edition"
+  },
+  {
+    "product_id": 5,
+    "product_name": "Silla Gamer",
+    "type": "Gamer",
+    "brand": "Racer",
+    "color": "Red & Black",
+    "notes": "Special Edition"
+  },
+  {
+  "product_id": 6,
+  "product_name": "Gamer Stick",
+  "type": "Gamer",
+  "brand": "Gadnic",
+  "color": "Grey",
+  "notes": ""
+  },
+  {"product_id": 7,
+  "productName": "Mochila",
+  "type": "",
+  "brand": "Everlast",
+  "color": "Blue",
+  "notes": "Permite Notebook"
   }
 ]
