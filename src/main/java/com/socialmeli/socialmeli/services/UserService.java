@@ -103,7 +103,7 @@ public class UserService implements IUserService{
     // Verify if user is a follower of userToFollow
     private Boolean userIsFollowerOf(User user, User userToFollow) {
         if (user.getUserId().equals(userToFollow.getUserId()))
-            throw new BadRequestException("No puede realizar la acciòn a el mismo usuario");
+            throw new BadRequestException("No puede realizar la acción a el mismo usuario");
 
         return user.getFollowed().stream().anyMatch(
                 followed -> followed.getUserId().equals(userToFollow.getUserId())
