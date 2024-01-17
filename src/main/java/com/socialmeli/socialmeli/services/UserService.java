@@ -43,11 +43,12 @@ public class UserService implements IUserService{
 
     @Override
     public UserFollowedDto listFollowed(Integer userId) {
-
         User user = userRepository.findById(userId).orElse(null);
-        List<User> followed = userRepository.listFollowed(userId);
+        if (Objects.isNull(user))
+            throw new BadRequestException("No se encontro un usuario con el id " + userId);
 
         return new UserFollowedDto(user.getUserId(), user.getUserName(), mapper.convertToUserDtoList(user.getFollowed()));
+
     }
 
 }
