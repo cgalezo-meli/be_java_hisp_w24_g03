@@ -70,10 +70,10 @@ public class UserService implements IUserService{
             throw new BadRequestException("El usuario " + userId + " no sigue al usuario " + userIdToFollow);
 
         // Remove user as "follower" in userToUnfollow
-        userToUnfollow.getFollowers().remove(user);
+        userToUnfollow.getFollowers().removeIf(u -> u.getUserId().equals(user.getUserId()));
 
         // Remove userToUnfollow as "followed" in user
-        user.getFollowed().remove(userToUnfollow);
+        user.getFollowed().removeIf(u -> u.getUserId().equals(userToUnfollow.getUserId()));
         return new ResponseDto("Unfollow exitoso");
     }
 
