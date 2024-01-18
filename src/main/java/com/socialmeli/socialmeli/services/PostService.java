@@ -80,7 +80,7 @@ public class PostService implements IPostService{
         if(order.equals("date_desc"))
             return posts.stream().sorted(Comparator.comparing(PostDto::date).reversed()).toList();
 
-        throw new BadRequestException("Debe ingresar un orden valido, como name_asc o name_desc");
+        throw new BadRequestException("Debe ingresar un orden valido");
     }
 
 }
