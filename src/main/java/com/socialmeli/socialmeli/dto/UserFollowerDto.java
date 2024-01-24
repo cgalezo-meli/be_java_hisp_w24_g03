@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public record UserFollowerDto(
-        @JsonProperty("userId")
+        @JsonProperty("user_id")
         Integer userId,
-        @JsonProperty("userName")
+        @JsonProperty("user_name")
         String userName,
         List<UserDto> follower) {
 }
