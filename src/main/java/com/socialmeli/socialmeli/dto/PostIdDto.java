@@ -1,6 +1,7 @@
 package com.socialmeli.socialmeli.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -9,8 +10,10 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import java.time.LocalDate;
 
 public record PostIdDto(
-        Integer user_id,
-        Integer post_id,
+        @JsonProperty("userId")
+        Integer userId,
+        @JsonProperty("post_id")
+        Integer postId,
         @JsonDeserialize(using = LocalDateDeserializer.class)
         @JsonSerialize(using = LocalDateSerializer.class)
         @JsonFormat(pattern ="dd-MM-yyyy")

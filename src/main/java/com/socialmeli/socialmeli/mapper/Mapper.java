@@ -38,7 +38,7 @@ public class Mapper {
 
     public Post convertDtoToPost(PostDto postDto){
         Post entity = new Post();
-        entity.setUserId(postDto.user_id());
+        entity.setUserId(postDto.userId());
         entity.setDate(postDto.date());
         entity.setProduct(convertDtoToProduct(postDto.product()));
         entity.setCategory(postDto.category());
@@ -59,8 +59,8 @@ public class Mapper {
 
     public Product convertDtoToProduct(ProductDto productDto){
         Product product = new Product();
-        product.setProductId(productDto.product_id());
-        product.setProductName(productDto.product_name());
+        product.setProductId(productDto.productId());
+        product.setProductName(productDto.productName());
         product.setType(productDto.type());
         product.setBrand(productDto.brand());
         product.setColor(productDto.color());
