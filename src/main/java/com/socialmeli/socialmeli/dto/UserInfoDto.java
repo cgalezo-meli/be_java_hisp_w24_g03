@@ -1,10 +1,14 @@
 package com.socialmeli.socialmeli.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public record UserInfoDto(
-        Integer user_id,
-        String user_name,
+        @JsonProperty("user_id")
+        Integer userId,
+        @JsonProperty("user_name")
+        String userName,
         List<UserDto> followers,
         List<UserDto> followed
 ) {

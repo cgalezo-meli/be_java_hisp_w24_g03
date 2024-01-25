@@ -34,13 +34,13 @@ public class PostService implements IPostService{
 
     @Override
     public PostIdDto save(PostDto postDto) {
-        if(postDto.user_id() == null || postDto.date() == null || postDto.product() == null || postDto.category() == null
+        if(postDto.userId() == null || postDto.date() == null || postDto.product() == null || postDto.category() == null
                 || postDto.price() == null){
             throw new BadRequestException("Los datos ingresados no son correctos.");
         }
-        User user = userRepository.findById(postDto.user_id()).orElse(null);
+        User user = userRepository.findById(postDto.userId()).orElse(null);
         if(Objects.isNull(user)){
-            throw new BadRequestException("No existe el usuario con id: " + postDto.user_id());
+            throw new BadRequestException("No existe el usuario con id: " + postDto.userId());
         }
         Post post = mapper.convertDtoToPost(postDto);
         Integer postId = postRepository.findAll().stream().map(node -> node.getPostId()).max(Integer::compareTo).orElse(0);
@@ -64,11 +64,12 @@ public class PostService implements IPostService{
         List<PostDto> allFollowedPosts = new ArrayList<>();
 
         for (UserDto userDto : followedList){
-            allFollowedPosts.addAll( this.getUserPosts(userDto.user_id()));
+            allFollowedPosts.addAll(this.getUserPosts(userDto.userId()));
         }
 
         if(allFollowedPosts.isEmpty()){
             throw new NotFoundException("No se encontraron post para los usuarios que sigue el usuario " + userId);
+
         }
 
         LocalDate currentDate = LocalDate.now();

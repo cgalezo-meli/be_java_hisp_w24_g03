@@ -248,7 +248,7 @@ Get a list of posts made by the sellers that a user follows in the last two week
     "user_id": 4698,
     "posts": [ {
             “user_id”: 123,
-            "post_id": 32,
+            "postId": 32,
             "date": "01-05-2021",
             "product": {
                 "product_id": 62,
@@ -263,7 +263,7 @@ Get a list of posts made by the sellers that a user follows in the last two week
         },
         {
             “user_id”: 234,
-            "post_id": 18,
+            "postId": 18,
             "date": "29-04-2021",
             "product": {
                 "product_id": 1,

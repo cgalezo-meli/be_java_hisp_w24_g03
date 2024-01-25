@@ -1,4 +1,10 @@
 package com.socialmeli.socialmeli.dto;
 
-public record UserFollowersDto(Integer user_id, String user_name, Integer followers_count) {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record UserFollowersDto(
+        @JsonProperty("user_id")
+        Integer userId,
+        @JsonProperty("user_name")
+        String userName, Integer followers_count) {
 }
