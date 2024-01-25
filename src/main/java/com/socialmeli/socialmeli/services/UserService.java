@@ -62,6 +62,12 @@ public class UserService implements IUserService{
     }
 
     public ResponseDto unfollow(Integer userId, Integer userIdToFollow) {
+        if(Objects.isNull(userId))
+            throw new BadRequestException("No ingreso correctamente el paramentro userId");
+
+        if(Objects.isNull(userIdToFollow))
+            throw new BadRequestException("No ingreso correctamente el paramentro userIdToFollow");
+
         User user = this.userExists(userId);
         User userToUnfollow = this.userExists(userIdToFollow);
 

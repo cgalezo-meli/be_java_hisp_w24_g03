@@ -78,7 +78,7 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Test that given a non-existent user to follow to existent user")
+    @DisplayName("Test that given a non-existent user to follow an existent user")
     void nonExistentUserFollowsAnExistentUserTest() {
         // Arrange
         int nonExistentUserId = 1010;
@@ -91,12 +91,12 @@ public class UserServiceTest {
         Assertions.assertThrows(
                 NotFoundException.class,
                 () -> userService.follow(nonExistentUserId, userToFollow),
-                "User was able to follow a non-existent user"
+                "Non-existent user was able to follow an existent user"
         );
     }
 
     @Test
-    @DisplayName("Test to Follow a followed user")
+    @DisplayName("Test to follow a followed user")
     void followToFollowedUser() {
         // Arrange
         int user = 1465;
@@ -110,7 +110,7 @@ public class UserServiceTest {
         Assertions.assertThrows(
                 BadRequestException.class,
                 () -> userService.follow(user, userToFollow),
-                "User was able to follow to himself"
+                "User was able to follow a followed user"
         );
     }
 
@@ -132,7 +132,7 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Test to follow to null user")
+    @DisplayName("Test to follow a null user")
     void followToNullUser() {
         // Arrange
         int user = 1115;
@@ -141,7 +141,113 @@ public class UserServiceTest {
         Assertions.assertThrows(
                 BadRequestException.class,
                 () -> userService.follow(user, null),
-                "User was able to follow to himself"
+                "User was able to follow a null user"
+        );
+    }
+
+    @Test
+    @DisplayName("Test to unfollow an existing user")
+    void unfollowToExistentUserTest() {
+        // Arrange
+        int follower = 1465;
+        int userToUnfollow = 4698;
+        ResponseDto expected = new ResponseDto("Unfollow exitoso");
+
+        // when-then
+        Mockito.when(userRepository.findById(follower)).thenReturn(Optional.of(userUtils.getUSER_1465()));
+        Mockito.when(userRepository.findById(userToUnfollow)).thenReturn(Optional.of(userUtils.getUSER_4698()));
+
+        // Act
+        ResponseDto result =userService.unfollow(follower, userToUnfollow);
+
+        // Assert
+        Assertions.assertEquals(expected, result, "It was not possible to unfollow the user");
+    }
+
+    @Test
+    @DisplayName("Test to unfollow a non-existent user")
+    void unfollowToNonExistentUserTest() {
+        // Arrange
+        int existentFollower = 1465;
+        int nonExistentUserToIUnfollow = 1010;
+
+        // when-then
+        Mockito.when(userRepository.findById(existentFollower)).thenReturn(Optional.of(userUtils.getUSER_1465()));
+        Mockito.when(userRepository.findById(nonExistentUserToIUnfollow)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        Assertions.assertThrows(
+                NotFoundException.class,
+                () -> userService.unfollow(existentFollower, nonExistentUserToIUnfollow),
+                "User was able to unfollow a non-existent user"
+        );
+    }
+
+    @Test
+    @DisplayName("Test that given a non-existent user to unfollow an existent user")
+    void nonExistentUserUnfollowsAnExistentUserTest() {
+        // Arrange
+        int nonExistentFollower = 1010;
+        int userToUnfollow = 1465;
+
+        // when-then
+        Mockito.when(userRepository.findById(nonExistentFollower)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        Assertions.assertThrows(
+                NotFoundException.class,
+                () -> userService.unfollow(nonExistentFollower, userToUnfollow),
+                "Non-existent user was able to unfollow an user"
+        );
+    }
+
+    @Test
+    @DisplayName("Test to unfollow a non-followed user")
+    void unfollowToUnfollowedUser() {
+        // Arrange
+        int follower = 1465;
+        int userToUnfollow = 1115;
+
+        // when-then
+        Mockito.when(userRepository.findById(follower)).thenReturn(Optional.of(userUtils.getUSER_1465()));
+        Mockito.when(userRepository.findById(userToUnfollow)).thenReturn(Optional.of(userUtils.getUSER_1115()));
+
+        // Act & Assert
+        Assertions.assertThrows(
+                BadRequestException.class,
+                () -> userService.unfollow(follower, userToUnfollow),
+                "User was able to unfollow a non-followed user"
+        );
+    }
+
+    @Test
+    @DisplayName("Test to follow to the same user")
+    void unfollowToSameUserTest() {
+        // Arrange
+        int user = 1115;
+
+        // when-then
+        Mockito.when(userRepository.findById(user)).thenReturn(Optional.of(userUtils.getUSER_1115()));
+
+        // Act & Assert
+        Assertions.assertThrows(
+                BadRequestException.class,
+                () -> userService.unfollow(user, user),
+                "User was able to unfollow to himself"
+        );
+    }
+
+    @Test
+    @DisplayName("Test to follow a null user")
+    void unfollowToNullUser() {
+        // Arrange
+        int user = 1115;
+
+        // Act & Assert
+        Assertions.assertThrows(
+                BadRequestException.class,
+                () -> userService.unfollow(user, null),
+                "User was able to unfollow a null user"
         );
     }
 
