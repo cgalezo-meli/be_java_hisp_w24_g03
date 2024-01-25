@@ -26,17 +26,32 @@ public class UserRepositoryImpl implements IUserRepository{
 
     @Override
     public User save(User user) {
+        if (user.getUserId()==null)
+            user.setUserId(users.size()+1);
+
+        if (users.add(user))
+            return user;
+
         return null;
     }
 
     @Override
     public User update(User user) {
-        return null;
+        Optional<User> foundUser = users.stream().filter(
+                u -> u.getUserId().equals(user.getUserId())
+        ).findFirst();
+
+        if (foundUser.isEmpty())
+            return null;
+
+        foundUser.ifPresent(u -> users.set(users.indexOf(u), user));
+
+        return user;
     }
 
     @Override
     public Boolean deleteById(Integer id) {
-        return null;
+        return this.users.removeIf(user -> user.getUserId().equals(id));
     }
 
     @Override
