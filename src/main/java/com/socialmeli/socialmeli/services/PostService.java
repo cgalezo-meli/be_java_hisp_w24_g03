@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class PostService implements IPostService{
@@ -60,13 +57,18 @@ public class PostService implements IPostService{
 
     @Override
     public UserFollowedPostsDto getLastTwoWeeksFollowedPosts(Integer userId, List<UserDto> followedList, String order){
-        if(postRepository.findById(userId).isEmpty())
-            throw new NotFoundException("No se encontraron post del usuario " + userId);
+        if(followedList.isEmpty()){
+            throw new NotFoundException("El usuario " + userId + " no sigue a otro usuarios");
+        }
 
         List<PostDto> allFollowedPosts = new ArrayList<>();
 
         for (UserDto userDto : followedList){
-            allFollowedPosts.addAll(this.getUserPosts(userDto.user_id()));
+            allFollowedPosts.addAll( this.getUserPosts(userDto.user_id()));
+        }
+
+        if(allFollowedPosts.isEmpty()){
+            throw new NotFoundException("No se encontraron post para los usuarios que sigue el usuario " + userId);
         }
 
         LocalDate currentDate = LocalDate.now();
