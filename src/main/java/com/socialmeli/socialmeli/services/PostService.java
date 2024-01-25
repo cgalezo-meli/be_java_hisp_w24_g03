@@ -67,14 +67,14 @@ public class PostService implements IPostService{
             allFollowedPosts.addAll(this.getUserPosts(userDto.userId()));
         }
 
-        if(allFollowedPosts.isEmpty()){
-            throw new NotFoundException("No se encontraron post para los usuarios que sigue el usuario " + userId);
+        LocalDate currentDate = LocalDate.now();
+        allFollowedPosts = sortLastFollowedPost(allFollowedPosts.stream().filter(post -> ChronoUnit.DAYS.between(post.date(),currentDate)<=14).toList(), order);
 
+        if(allFollowedPosts.isEmpty()){
+            throw new NotFoundException("No se encontraron post recientes de los usuarios que sigue el usuario " + userId);
         }
 
-        LocalDate currentDate = LocalDate.now();
-
-        return new UserFollowedPostsDto(userId, sortLastFollowedPost(allFollowedPosts.stream().filter(post -> ChronoUnit.DAYS.between(post.date(),currentDate)<=14).toList(), order)) ;
+        return new UserFollowedPostsDto(userId, allFollowedPosts) ;
     }
 
     public List<PostDto> sortLastFollowedPost(List<PostDto> posts, String order){
