@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class Utils {
+public class UserUtils {
     private final User USER_1465 = new User(
             1465,
             "usuario1",
@@ -51,6 +51,13 @@ public class Utils {
     private final User USER_4698 = new User(
             4698,
             "usuario2",
+            new ArrayList<>(),
+            new ArrayList<>()
+    );
+
+    private final User NEW_USER = new User(
+            1117,
+            "usuario1",
             new ArrayList<>(),
             new ArrayList<>()
     );

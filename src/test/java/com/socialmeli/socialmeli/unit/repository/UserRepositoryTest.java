@@ -3,6 +3,7 @@ package com.socialmeli.socialmeli.unit.repository;
 import com.socialmeli.socialmeli.entities.User;
 import com.socialmeli.socialmeli.repositories.IUserRepository;
 import com.socialmeli.socialmeli.repositories.UserRepositoryImpl;
+import com.socialmeli.socialmeli.utils.UserUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,49 +13,29 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserRepositoryTest {
-    private final User NEW_USER = new User(
-            1117,
-            "usuario1",
-            new ArrayList<>(),
-            new ArrayList<>()
-    );
-    private final User USER_1115 = new User(
-            1115,
-            "usuario3",
-            new ArrayList<>(),
-            new ArrayList<>(
-                    List.of(
-                            new User(
-                                    4698,
-                                    "usuario2",
-                                    null,
-                                    null
-                            )
-                    )
-            )
-    );
 
-    IUserRepository userRepositor = new UserRepositoryImpl();
+    IUserRepository userRepository = new UserRepositoryImpl();
 
+    UserUtils userUtils = new UserUtils();
     @Test
     @DisplayName("Test to add a new user")
     void saveTest(){
         // Act
-        var result = userRepositor.save(NEW_USER);
+        var result = userRepository.save(userUtils.getNEW_USER());
 
         // Assert
-        Assertions.assertEquals(NEW_USER, result, "User was not saved");
+        Assertions.assertEquals(userUtils.getNEW_USER(), result, "User was not saved");
     }
 
     @Test
     @DisplayName("Test to update an user")
     void updateTest(){
         // Arrange
-        User expected = USER_1115;
+        User expected = userUtils.getUSER_1115();
         expected.setUserName("User 1115");
 
         // Act
-        var result = userRepositor.update(expected);
+        var result = userRepository.update(expected);
 
         // Assert
         Assertions.assertEquals(expected, result, "User was not updated");
@@ -67,7 +48,7 @@ public class UserRepositoryTest {
         int idParam = 1115;
 
         // Act
-        var result = userRepositor.deleteById(idParam);
+        var result = userRepository.deleteById(idParam);
 
         // Assert
         Assertions.assertTrue(result, "User was not delete");
@@ -78,10 +59,10 @@ public class UserRepositoryTest {
     void findByIdTest(){
         // Arrange
         int idParam = 1115;
-        Optional<User> expected = Optional.of(USER_1115);
+        Optional<User> expected = Optional.of(userUtils.getUSER_1115());
 
         // Act
-        var result = userRepositor.findById(idParam);
+        var result = userRepository.findById(idParam);
 
         // Assert
         Assertions.assertEquals(expected, result, "User was not found");
@@ -94,7 +75,7 @@ public class UserRepositoryTest {
         int expected = 2;
 
         // Act
-        int result = userRepositor.findAll().size();
+        int result = userRepository.findAll().size();
 
         // Assert
         Assertions.assertEquals(expected, result, "Users were not found");
@@ -105,10 +86,10 @@ public class UserRepositoryTest {
     void listFollowedTest(){
         // Arrange
         int idParam = 1115;
-        List<User> expected = USER_1115.getFollowed();
+        List<User> expected = userUtils.getUSER_1115().getFollowed();
 
         // Act
-        var result = userRepositor.listFollowed(idParam);
+        var result = userRepository.listFollowed(idParam);
 
         // Assert
         Assertions.assertEquals(expected, result, "List was not found");
@@ -122,7 +103,7 @@ public class UserRepositoryTest {
         List<User> expected = new ArrayList<>();
 
         // Act
-        var result = userRepositor.listFollowed(idParam);
+        var result = userRepository.listFollowed(idParam);
 
         // Assert
         Assertions.assertEquals(expected, result, "List was not found");

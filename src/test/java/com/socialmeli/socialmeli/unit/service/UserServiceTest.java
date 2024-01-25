@@ -6,10 +6,8 @@ import com.socialmeli.socialmeli.entities.User;
 import com.socialmeli.socialmeli.exceptions.BadRequestException;
 import com.socialmeli.socialmeli.exceptions.NotFoundException;
 import com.socialmeli.socialmeli.repositories.IUserRepository;
-import com.socialmeli.socialmeli.repositories.UserRepositoryImpl;
-import com.socialmeli.socialmeli.services.IUserService;
 import com.socialmeli.socialmeli.services.UserService;
-import com.socialmeli.socialmeli.utils.Utils;
+import com.socialmeli.socialmeli.utils.UserUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,8 +17,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -28,15 +24,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
-
-
     @Mock
     private IUserRepository userRepository;
 
     @InjectMocks
     private UserService userService;
 
-    Utils utils = new Utils();
+    UserUtils userUtils = new UserUtils();
 
     @Test
     @DisplayName("Test to follow an existing user")
@@ -47,8 +41,8 @@ public class UserServiceTest {
         ResponseDto expected = new ResponseDto("Follow exitoso");
 
         // when-then
-        Mockito.when(userRepository.findById(followed)).thenReturn(Optional.of(utils.getUSER_1465()));
-        Mockito.when(userRepository.findById(existentUserId)).thenReturn(Optional.of(utils.getUSER_1115()));
+        Mockito.when(userRepository.findById(followed)).thenReturn(Optional.of(userUtils.getUSER_1465()));
+        Mockito.when(userRepository.findById(existentUserId)).thenReturn(Optional.of(userUtils.getUSER_1115()));
 
         // Act
         ResponseDto result =userService.follow(followed, existentUserId);
@@ -65,7 +59,7 @@ public class UserServiceTest {
         int nonExistentUserId = 1010;
 
         // when-then
-        Mockito.when(userRepository.findById(userExistent)).thenReturn(Optional.of(utils.getUSER_1465()));
+        Mockito.when(userRepository.findById(userExistent)).thenReturn(Optional.of(userUtils.getUSER_1465()));
         Mockito.when(userRepository.findById(nonExistentUserId)).thenReturn(Optional.empty());
 
         // Act & Assert
@@ -102,8 +96,8 @@ public class UserServiceTest {
         int userToFollow = 4698;
 
         // when-then
-        Mockito.when(userRepository.findById(user)).thenReturn(Optional.of(utils.getUSER_1465()));
-        Mockito.when(userRepository.findById(userToFollow)).thenReturn(Optional.of(utils.getUSER_4698()));
+        Mockito.when(userRepository.findById(user)).thenReturn(Optional.of(userUtils.getUSER_1465()));
+        Mockito.when(userRepository.findById(userToFollow)).thenReturn(Optional.of(userUtils.getUSER_4698()));
 
         // Act & Assert
         Assertions.assertThrows(
@@ -120,7 +114,7 @@ public class UserServiceTest {
         int user = 1115;
 
         // when-then
-        Mockito.when(userRepository.findById(user)).thenReturn(Optional.of(utils.getUSER_1115()));
+        Mockito.when(userRepository.findById(user)).thenReturn(Optional.of(userUtils.getUSER_1115()));
 
         // Act & Assert
         Assertions.assertThrows(
@@ -145,9 +139,10 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Test to get total followers")
     public void getTotalFollowersTest(){
         //arrange
-        User user = utils.getUSER_1465();
+        User user = userUtils.getUSER_1465();
         Mockito.when(userRepository.findById(user.getUserId())).thenReturn(Optional.of(user));
         UserFollowersDto expected = new UserFollowersDto(user.getUserId(), user.getUserName(), user.getFollowers().size());
 
@@ -159,13 +154,13 @@ public class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Test to get a Not Found Exception when not found an existent user")
     public void getTotalFollowersThrowsNotFounExceptionTest(){
         //arrange
         int userId = 10;
         Mockito.when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
-        //act
-        //assert
+        //act & assert
         Assertions.assertThrows(NotFoundException.class, () -> userService.getTotalFollowers(userId));
     }
 
