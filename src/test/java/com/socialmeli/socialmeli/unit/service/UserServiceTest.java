@@ -20,12 +20,15 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.mockito.ArgumentMatchers.any;
 
 
 @SpringBootTest
@@ -338,9 +341,7 @@ public class UserServiceTest {
         Mockito.when(userRepository.listFollowed(userId)).thenReturn(user4698.getFollowed());
         Mockito.when(mapper.convertToUserDtoList(Mockito.anyList())).thenAnswer(list -> {
             List<User> sortedList = list.getArgument(0);
-            return sortedList.stream()
-                    .map(u -> new UserDto(u.getUserId(), u.getUserName()))
-                    .collect(Collectors.toList());
+            return UserUtils.convertToUserDtoList(sortedList);
         });
 
         //Act
@@ -359,6 +360,7 @@ public class UserServiceTest {
         String order = "name_desc";
 
         User user = userUtils.getUSER_4698();
+        List<UserDto> followedUserDto = userUtils.getFollowedUserDto();
 
         UserFollowedDto expected = new UserFollowedDto(4698,
                 "usuario2",
@@ -373,13 +375,11 @@ public class UserServiceTest {
         Mockito.when(userRepository.listFollowed(userId)).thenReturn(user.getFollowed());
         Mockito.when(mapper.convertToUserDtoList(Mockito.anyList())).thenAnswer(list -> {
             List<User> sortedList = list.getArgument(0);
-            return sortedList.stream()
-                    .map(u -> new UserDto(u.getUserId(), u.getUserName()))
-                    .collect(Collectors.toList());
+            return UserUtils.convertToUserDtoList(sortedList);
         });
 
         //Act
-        var result = userService.listFollowed(userId,order);
+        var result = userService.listFollowed(userId, order);
 
         //Assert
         Assertions.assertEquals(expected,result,"The lists are different.");
