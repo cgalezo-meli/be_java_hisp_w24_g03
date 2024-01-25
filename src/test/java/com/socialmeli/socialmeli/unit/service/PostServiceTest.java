@@ -6,6 +6,7 @@ import com.socialmeli.socialmeli.dto.UserDto;
 import com.socialmeli.socialmeli.dto.UserFollowedPostsDto;
 import com.socialmeli.socialmeli.entities.Post;
 import com.socialmeli.socialmeli.entities.Product;
+import com.socialmeli.socialmeli.exceptions.NotFoundException;
 import com.socialmeli.socialmeli.mapper.Mapper;
 import com.socialmeli.socialmeli.repositories.PostRepositoryImpl;
 import com.socialmeli.socialmeli.services.PostService;
@@ -104,5 +105,33 @@ public class PostServiceTest {
 
         //Assert
         Assertions.assertEquals(expected, result);
+    }
+
+    @Test
+    @DisplayName("getLastTwoWeeksFollowedPosts: should return NotFoundException when followedList is empty")
+    public void followedListEmptyGetLastTwoWeeksFollowedPosts(){
+        //Arrange
+        Integer userId = 234;
+        String order = "date_desc";
+        List<UserDto> followedList = new ArrayList<>();
+
+        //Assert
+        Assertions.assertThrows(NotFoundException.class, () ->{
+            postService.getLastTwoWeeksFollowedPosts(userId, followedList, order);
+        });
+    }
+
+    @Test
+    @DisplayName("getLastTwoWeeksFollowedPosts: should return NotFoundException when allFollowedPosts is empty")
+    public void allFollowedPostsEmptyGetLastTwoWeeksFollowedPosts(){
+        //Arrange
+        Integer userId = 4698;
+        String order = "date_desc";
+        List<UserDto> followedList = new ArrayList<>();
+
+        //Assert
+        Assertions.assertThrows(NotFoundException.class, () ->{
+            postService.getLastTwoWeeksFollowedPosts(userId, followedList, order);
+        });
     }
 }
