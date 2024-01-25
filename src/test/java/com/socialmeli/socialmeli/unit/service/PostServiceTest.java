@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -86,7 +85,7 @@ public class PostServiceTest {
     @DisplayName("getLastTwoWeeksFollowedPosts: should return NotFoundException when allFollowedPosts is empty")
     public void allFollowedPostsEmptyGetLastTwoWeeksFollowedPosts(){
         //Arrange
-        Integer userId = 4698;
+        Integer userId = 567;
         String order = "date_desc";
         List<UserDto> followedList = new ArrayList<>();
 
