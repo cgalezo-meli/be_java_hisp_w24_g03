@@ -38,6 +38,10 @@
       }],
     "followed": [
       {
+        "user_id": 234,
+        "user_name": "usuario4"
+      },
+      {
         "user_id": 1465,
         "user_name": "usuario1"
       },

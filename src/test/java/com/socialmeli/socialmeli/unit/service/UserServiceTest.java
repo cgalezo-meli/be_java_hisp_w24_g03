@@ -1,10 +1,13 @@
 package com.socialmeli.socialmeli.unit.service;
 
 import com.socialmeli.socialmeli.dto.ResponseDto;
+import com.socialmeli.socialmeli.dto.UserDto;
+import com.socialmeli.socialmeli.dto.UserFollowedDto;
 import com.socialmeli.socialmeli.dto.UserFollowersDto;
 import com.socialmeli.socialmeli.entities.User;
 import com.socialmeli.socialmeli.exceptions.BadRequestException;
 import com.socialmeli.socialmeli.exceptions.NotFoundException;
+import com.socialmeli.socialmeli.mapper.Mapper;
 import com.socialmeli.socialmeli.repositories.IUserRepository;
 import com.socialmeli.socialmeli.services.UserService;
 import com.socialmeli.socialmeli.utils.UserUtils;
@@ -17,7 +20,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 import org.springframework.boot.test.context.SpringBootTest;
 
 
@@ -26,10 +33,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class UserServiceTest {
     @Mock
     private IUserRepository userRepository;
-
+    @Mock
+    Mapper mapper;
     @InjectMocks
     private UserService userService;
-
     UserUtils userUtils = new UserUtils();
 
     @Test
@@ -164,4 +171,112 @@ public class UserServiceTest {
         Assertions.assertThrows(NotFoundException.class, () -> userService.getTotalFollowers(userId));
     }
 
+    @Test
+    @DisplayName("Verify that the order 'name_asc' exists")
+    public void nameOrderHappyPath() {
+        // Arrange
+        Integer userId = 4698;
+        String order = "name_asc";
+        User user = userUtils.getUSER_4698();
+
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        // Act y Assert
+        Assertions.assertDoesNotThrow(() -> userService.listFollowed(userId, order),
+                "The order name_asc it should exists");
+    }
+
+    @Test
+    @DisplayName("Verify that the order 'name_desc' exists")
+    public void nameDescOrderHappyPath() {
+        // Arrange
+        Integer userId = 4698;
+        String order = "name_desc";
+        User user = userUtils.getUSER_4698();
+
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        // Act y Assert
+        Assertions.assertDoesNotThrow(() -> userService.listFollowed(userId, order),
+                "The order name_desc it should exists");
+    }
+    @Test
+    @DisplayName("Verify that the order name is invalid by throwing an exception")
+    public void nameOrderSadPath(){
+        // Arrange
+        Integer userId = 4698;
+        String order = "invalid_order";
+
+        // Act & Assert
+        Assertions.assertThrows(BadRequestException.class, () -> userService.listFollowed(userId, order));
+    }
+
+    @Test
+    @DisplayName("Verify de correct order by name_asc")
+    public void listFollowedAscTest(){
+        //Arrange
+        Integer userId = 4698;
+        String order = "name_asc";
+        User user4698 = userUtils.getUSER_4698();
+
+        UserFollowedDto expected = new UserFollowedDto(4698,
+                "usuario2",
+                List.of(new UserDto(1465,
+                                "usuario1"),
+                        new UserDto(234,
+                                "usuario4"),
+                        new UserDto(123,
+                                "usuario5")));
+
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user4698));
+        Mockito.when(userRepository.listFollowed(userId)).thenReturn(user4698.getFollowed());
+        Mockito.when(mapper.convertToUserDtoList(Mockito.anyList())).thenAnswer(list -> {
+            List<User> sortedList = list.getArgument(0);
+            return sortedList.stream()
+                    .map(u -> new UserDto(u.getUserId(), u.getUserName()))
+                    .collect(Collectors.toList());
+        });
+
+        //Act
+        var result = userService.listFollowed(userId,order);
+
+        //Assert
+        Assertions.assertEquals(expected,result,"The lists are different.");
+    }
+
+
+    @Test
+    @DisplayName("Verify de correct order by name_desc")
+    public void listFollowedDescTest(){
+        //Arrange
+        Integer userId = 4698;
+        String order = "name_desc";
+
+        User user = userUtils.getUSER_4698();
+
+        UserFollowedDto expected = new UserFollowedDto(4698,
+                "usuario2",
+                List.of(new UserDto(123,
+                                "usuario5"),
+                        new UserDto(234,
+                                "usuario4"),
+                        new UserDto(1465,
+                                "usuario1")));
+
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.listFollowed(userId)).thenReturn(user.getFollowed());
+        Mockito.when(mapper.convertToUserDtoList(Mockito.anyList())).thenAnswer(list -> {
+            List<User> sortedList = list.getArgument(0);
+            return sortedList.stream()
+                    .map(u -> new UserDto(u.getUserId(), u.getUserName()))
+                    .collect(Collectors.toList());
+        });
+
+        //Act
+        var result = userService.listFollowed(userId,order);
+
+        //Assert
+        Assertions.assertEquals(expected,result,"The lists are different.");
+
+    }
 }
