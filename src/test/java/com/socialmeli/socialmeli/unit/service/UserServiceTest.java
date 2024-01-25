@@ -326,23 +326,16 @@ public class UserServiceTest {
         //Arrange
         Integer userId = 4698;
         String order = "name_asc";
-        User user4698 = userUtils.getUSER_4698();
+        User user = userUtils.getUSER_4698();
+        List<UserDto> orderedList = userUtils.getAscList();
 
         UserFollowedDto expected = new UserFollowedDto(4698,
                 "usuario2",
-                List.of(new UserDto(1465,
-                                "usuario1"),
-                        new UserDto(234,
-                                "usuario4"),
-                        new UserDto(123,
-                                "usuario5")));
+                orderedList);
 
-        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user4698));
-        Mockito.when(userRepository.listFollowed(userId)).thenReturn(user4698.getFollowed());
-        Mockito.when(mapper.convertToUserDtoList(Mockito.anyList())).thenAnswer(list -> {
-            List<User> sortedList = list.getArgument(0);
-            return UserUtils.convertToUserDtoList(sortedList);
-        });
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.listFollowed(userId)).thenReturn(user.getFollowed());
+        Mockito.when(mapper.convertToUserDtoList(Mockito.anyList())).thenReturn(orderedList);
 
         //Act
         var result = userService.listFollowed(userId,order);
@@ -360,23 +353,15 @@ public class UserServiceTest {
         String order = "name_desc";
 
         User user = userUtils.getUSER_4698();
-        List<UserDto> followedUserDto = userUtils.getFollowedUserDto();
+        List<UserDto> orderedList = userUtils.getDescList();
 
         UserFollowedDto expected = new UserFollowedDto(4698,
                 "usuario2",
-                List.of(new UserDto(123,
-                                "usuario5"),
-                        new UserDto(234,
-                                "usuario4"),
-                        new UserDto(1465,
-                                "usuario1")));
+                orderedList);
 
         Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         Mockito.when(userRepository.listFollowed(userId)).thenReturn(user.getFollowed());
-        Mockito.when(mapper.convertToUserDtoList(Mockito.anyList())).thenAnswer(list -> {
-            List<User> sortedList = list.getArgument(0);
-            return UserUtils.convertToUserDtoList(sortedList);
-        });
+        Mockito.when(mapper.convertToUserDtoList(Mockito.anyList())).thenReturn(orderedList);
 
         //Act
         var result = userService.listFollowed(userId, order);

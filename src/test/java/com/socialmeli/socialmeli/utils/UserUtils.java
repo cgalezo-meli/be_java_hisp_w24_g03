@@ -64,13 +64,13 @@ public class UserUtils {
                     new User(1465, "usuario1",null,null),
                     new User(123, "usuario5",null,null))));
 
-    List<UserDto> followedUserDto = List.of(
-            new UserDto(234,
-                    "usuario4"),
-            new UserDto(1465,
-                    "usuario1"),
-            new UserDto(123,
-                    "usuario5"));
+    List<UserDto> ascList = List.of(new UserDto(123, "usuario5"),
+            new UserDto(234, "usuario4"),
+            new UserDto(1465, "usuario1"));
+
+    List<UserDto> descList = List.of(new UserDto(1465, "usuario1"),
+            new UserDto(234, "usuario4"),
+            new UserDto(123,"usuario5"));
 
     private final User NEW_USER = new User(
             1117,
@@ -78,11 +78,4 @@ public class UserUtils {
             new ArrayList<>(),
             new ArrayList<>()
     );
-
-    public static List<UserDto> convertToUserDtoList(List<User> userList) {
-        return userList.stream()
-                .map(u -> new UserDto(u.getUserId(), u.getUserName()))
-                .collect(Collectors.toList());
-    }
-
 }
