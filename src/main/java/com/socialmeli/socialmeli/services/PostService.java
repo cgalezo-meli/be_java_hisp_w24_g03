@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class PostService implements IPostService{
@@ -60,8 +57,9 @@ public class PostService implements IPostService{
 
     @Override
     public UserFollowedPostsDto getLastTwoWeeksFollowedPosts(Integer userId, List<UserDto> followedList, String order){
-        if(postRepository.findById(userId).isEmpty())
-            throw new NotFoundException("No se encontraron post del usuario " + userId);
+        if(followedList.isEmpty()){
+            throw new NotFoundException("El usuario " + userId + " no sigue a otro usuarios");
+        }
 
         List<PostDto> allFollowedPosts = new ArrayList<>();
 
@@ -70,8 +68,13 @@ public class PostService implements IPostService{
         }
 
         LocalDate currentDate = LocalDate.now();
+        allFollowedPosts = sortLastFollowedPost(allFollowedPosts.stream().filter(post -> ChronoUnit.DAYS.between(post.date(),currentDate)<=14).toList(), order);
 
-        return new UserFollowedPostsDto(userId, sortLastFollowedPost(allFollowedPosts.stream().filter(post -> ChronoUnit.DAYS.between(post.date(),currentDate)<=14).toList(), order)) ;
+        if(allFollowedPosts.isEmpty()){
+            throw new NotFoundException("No se encontraron post recientes de los usuarios que sigue el usuario " + userId);
+        }
+
+        return new UserFollowedPostsDto(userId, allFollowedPosts) ;
     }
 
     public List<PostDto> sortLastFollowedPost(List<PostDto> posts, String order){
