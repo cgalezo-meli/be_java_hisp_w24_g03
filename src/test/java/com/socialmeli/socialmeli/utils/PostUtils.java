@@ -13,7 +13,7 @@ public class PostUtils {
     Post postId1 = new Post(1465,
             1,
             LocalDate.of(2024, 01, 02),
-            new Product(1, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"),
+            new Product(1, "Silla Gamer", "Gamer", "Racer", "Red", "Special Edition"),
             100,
             1500.50);
 
@@ -33,7 +33,7 @@ public class PostUtils {
 
     PostDto postDtoId1 = new PostDto(1465,
             LocalDate.of(2024, 01, 02),
-            new ProductDto(1, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"),
+            new ProductDto(1, "Silla Gamer", "Gamer", "Racer", "Red", "Special Edition"),
             100,
             1500.50);
 
