@@ -1,10 +1,12 @@
 package com.socialmeli.socialmeli.utils;
 
+import com.socialmeli.socialmeli.dto.UserDto;
 import com.socialmeli.socialmeli.entities.User;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class UserUtils {
@@ -61,5 +63,37 @@ public class UserUtils {
             new ArrayList<>(),
             new ArrayList<>()
     );
+
+    private final User USER_3105 = new User(
+            3105,
+            "usuario6",
+            new ArrayList<>(List.of(
+                    new User(
+                            1115,
+                            "usuario3",
+                            null,
+                            null
+                    ),
+                    new User(
+                            1465,
+                            "usuario1",
+                            null,
+                            null
+                    ),
+                    new User(
+                            4698,
+                            "usuario2",
+                            null,
+                            null
+                    )
+            )),
+            new ArrayList<>()
+    );
+
+    public static List<UserDto> convertToUserDtoList(List<User> userList) {
+        return userList.stream()
+                .map(u -> new UserDto(u.getUserId(), u.getUserName()))
+                .collect(Collectors.toList());
+    }
 
 }

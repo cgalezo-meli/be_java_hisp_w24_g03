@@ -1,13 +1,17 @@
 package com.socialmeli.socialmeli.unit.service;
 
 import com.socialmeli.socialmeli.dto.ResponseDto;
+import com.socialmeli.socialmeli.dto.UserDto;
+import com.socialmeli.socialmeli.dto.UserFollowerDto;
 import com.socialmeli.socialmeli.dto.UserFollowersDto;
 import com.socialmeli.socialmeli.entities.User;
 import com.socialmeli.socialmeli.exceptions.BadRequestException;
 import com.socialmeli.socialmeli.exceptions.NotFoundException;
+import com.socialmeli.socialmeli.mapper.Mapper;
 import com.socialmeli.socialmeli.repositories.IUserRepository;
 import com.socialmeli.socialmeli.services.UserService;
 import com.socialmeli.socialmeli.utils.UserUtils;
+import lombok.ToString;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +21,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.boot.test.context.SpringBootTest;
 
 
@@ -26,6 +35,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class UserServiceTest {
     @Mock
     private IUserRepository userRepository;
+
+    @Mock
+    Mapper mapper;
 
     @InjectMocks
     private UserService userService;
@@ -270,4 +282,112 @@ public class UserServiceTest {
         Assertions.assertThrows(NotFoundException.class, () -> userService.getTotalFollowers(userId));
     }
 
+    @Test
+    @DisplayName("test to verify that the order name_asc exists in the list of followers")
+    public void orderAscExistFollowersHappyTest(){
+        //arrange
+        Integer id = 3105;
+        User user = userUtils.getUSER_3105();
+
+        Mockito.when(userRepository.findById(id)).thenReturn(Optional.of(user));
+
+        //act
+        var result = userService.getFollowers(id, "name_asc");
+
+        //assert
+        Assertions.assertDoesNotThrow(() -> result, "The order name_asc does not exist in the list of followers");
+
+    }
+
+    @Test
+    @DisplayName("test to verify that the order name_desc exists in the list of followers")
+    public void orderDescExistFollowersHappyTest(){
+        //arrange
+        Integer id = 3105;
+        User user = userUtils.getUSER_3105();
+
+        Mockito.when(userRepository.findById(id)).thenReturn(Optional.of(user));
+
+        //act
+        var result = userService.getFollowers(id, "name_desc");
+
+        //assert
+        Assertions.assertDoesNotThrow(() -> result, "The order name_desc does not exist in the list of followers");
+    }
+
+    @Test
+    @DisplayName("test to verify that the order invalid not exists in the list of followers")
+    public void orderInvalidNotExistFollowersHappyTest(){
+        //arrange
+        Integer id = 3105;
+        User user = userUtils.getUSER_3105();
+
+        Mockito.when(userRepository.findById(id)).thenReturn(Optional.of(user));
+
+        //act
+        var result = userService.getFollowers(id, "invalid");
+
+        //assert
+        Assertions.assertThrows(BadRequestException.class, () -> userService.getFollowers(id, "invalid"));
+    }
+
+    @Test
+    @DisplayName("test to verify correct order of followers by name_asc")
+    public void listFollowerNameTest() {
+        //arrange
+        Integer id = 3105;
+        User user = userUtils.getUSER_3105();
+
+        UserFollowerDto expected = new UserFollowerDto(3105,
+                "usuario6",
+                List.of(new UserDto(1465,
+                                "usuario1"),
+                        new UserDto(4698,
+                                "usuario2"),
+                        new UserDto(1115,
+                                "usuario3")
+                )
+        );
+
+        Mockito.when(userRepository.findById(id)).thenReturn(Optional.of(user));
+        Mockito.when(mapper.convertToUserDtoList(Mockito.anyList())).thenAnswer(list -> {
+            List<User> sortedList = list.getArgument(0);
+            return UserUtils.convertToUserDtoList(sortedList);
+        });
+        //act
+        var result = userService.getFollowers(id, "name_asc");
+
+        //assert
+        Assertions.assertEquals(expected, result, "The list of followers is not ordered correctly");
+    }
+
+    @Test
+    @DisplayName("test to verify correct order of followers by name_desc")
+    public void listFollowerDescNameTest() {
+        //arrange
+        Integer id = 3105;
+        User user = userUtils.getUSER_3105();
+
+        UserFollowerDto expected = new UserFollowerDto(3105,
+                "usuario6",
+                List.of(new UserDto(1115,
+                                "usuario3"),
+                        new UserDto(4698,
+                                "usuario2"),
+                        new UserDto(1465,
+                                "usuario1")
+                )
+        );
+
+        Mockito.when(userRepository.findById(id)).thenReturn(Optional.of(user));
+        Mockito.when(mapper.convertToUserDtoList(Mockito.anyList())).thenAnswer(list -> {
+            List<User> sortedList = list.getArgument(0);
+            return UserUtils.convertToUserDtoList(sortedList);
+        });
+        //act
+        var result = userService.getFollowers(id, "name_desc");
+
+        //assert
+        Assertions.assertEquals(expected, result, "The list of followers is not ordered correctly");
+    }
 }
