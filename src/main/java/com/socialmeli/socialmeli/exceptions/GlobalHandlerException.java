@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class GlobalHandlerException {
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<?> badRequest(BadRequestException e){
+    public ResponseEntity<ExceptionDto> badRequest(BadRequestException e){
         ExceptionDto exceptionDto = new ExceptionDto(e.getMessage());
         return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
     }

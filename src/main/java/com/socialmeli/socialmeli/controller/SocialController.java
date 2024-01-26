@@ -3,7 +3,6 @@ package com.socialmeli.socialmeli.controller;
 import com.socialmeli.socialmeli.dto.UserDto;
 import com.socialmeli.socialmeli.dto.UserFollowerDto;
 import com.socialmeli.socialmeli.dto.*;
-import com.socialmeli.socialmeli.services.IUserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -12,9 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.socialmeli.socialmeli.dto.PostDto;
-import com.socialmeli.socialmeli.dto.UserDto;
 import com.socialmeli.socialmeli.services.UserService;
-import org.springframework.web.bind.annotation.*;
 import com.socialmeli.socialmeli.services.PostService;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -69,7 +66,7 @@ public class SocialController {
     }
 
     @PostMapping("/products/post")
-    public ResponseEntity<?> createPost(@RequestBody @Valid PostDto postDto){
+    public ResponseEntity<PostIdDto> createPost(@RequestBody @Valid PostDto postDto){
         return new ResponseEntity<>(postService.save(postDto), HttpStatus.OK);
     }
 
