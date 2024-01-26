@@ -83,26 +83,23 @@ public class UserUtils {
             3105,
             "usuario6",
             new ArrayList<>(List.of(
-                    new User(
-                            1115,
-                            "usuario3",
-                            null,
-                            null
-                    ),
-                    new User(
-                            1465,
-                            "usuario1",
-                            null,
-                            null
-                    ),
-                    new User(
-                            4698,
-                            "usuario2",
-                            null,
-                            null
-                    )
+                    new User(1115,"usuario3",null,null),
+                    new User(1465,"usuario1",null,null),
+                    new User(4698,"usuario2",null,null)
             )),
             new ArrayList<>()
+    );
+
+    List<UserDto> ascListFolowers = List.of(
+            new UserDto(1465, "usuario1"),
+            new UserDto(4698, "usuario2"),
+            new UserDto(1115, "usuario3")
+    );
+
+    List<UserDto> descListFolowers = List.of(
+            new UserDto(1115, "usuario3"),
+            new UserDto(4698, "usuario2"),
+            new UserDto(1465,"usuario1")
     );
 
     public static List<UserDto> convertToUserDtoList(List<User> userList) {
