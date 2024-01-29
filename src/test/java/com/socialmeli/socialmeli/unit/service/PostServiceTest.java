@@ -10,6 +10,7 @@ import com.socialmeli.socialmeli.mapper.Mapper;
 import com.socialmeli.socialmeli.repositories.PostRepositoryImpl;
 import com.socialmeli.socialmeli.services.PostService;
 import com.socialmeli.socialmeli.utils.PostUtils;
+import com.socialmeli.socialmeli.utils.UserUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,8 @@ public class PostServiceTest {
 
     PostUtils postUtils = new PostUtils();
 
+    UserUtils userUtils = new UserUtils();
+
     // Constantes
 
     @Test
@@ -45,11 +48,7 @@ public class PostServiceTest {
         //Arrange
         Integer userId = 4698;
         String order = "date_desc";
-        List<UserDto> followedList = List.of(
-                new UserDto(1465, "usuario1"),
-                new UserDto(234, "usuario4"),
-                new UserDto(123, "usuario5")
-        );
+        List<UserDto> followedList = userUtils.getFollowedList();
 
         ArrayList<Post> allPosts = new ArrayList<>(Arrays.asList(postUtils.getPostId1(), postUtils.getPostId2(), postUtils.getPostId7()));
 
@@ -102,11 +101,7 @@ public class PostServiceTest {
         //Arrange
         Integer userId = 4698;
         String order = "date_desc";
-        List<UserDto> followedList = List.of(
-                new UserDto(1465, "usuario1"),
-                new UserDto(234, "usuario4"),
-                new UserDto(123, "usuario5")
-        );
+        List<UserDto> followedList = userUtils.getFollowedList();
 
         ArrayList<Post> allPosts = new ArrayList<>(Arrays.asList(postUtils.getPostId1(), postUtils.getPostId2(), postUtils.getPostId7()));
 
@@ -127,11 +122,7 @@ public class PostServiceTest {
         //Arrange
         Integer userId = 4698;
         String order = "date_asc";
-        List<UserDto> followedList = List.of(
-                new UserDto(1465, "usuario1"),
-                new UserDto(234, "usuario4"),
-                new UserDto(123, "usuario5")
-        );
+        List<UserDto> followedList = userUtils.getFollowedList();
 
         ArrayList<Post> allPosts = new ArrayList<>(Arrays.asList(postUtils.getPostId1(), postUtils.getPostId2(), postUtils.getPostId7()));
 
@@ -153,11 +144,7 @@ public class PostServiceTest {
         //Arrange
         Integer userId = 4698;
         String order = "invalid_order";
-        List<UserDto> followedList = List.of(
-                new UserDto(1465, "usuario1"),
-                new UserDto(234, "usuario4"),
-                new UserDto(123, "usuario5")
-        );
+        List<UserDto> followedList = userUtils.getFollowedList();
 
         ArrayList<Post> allPosts = new ArrayList<>(Arrays.asList(postUtils.getPostId1(), postUtils.getPostId2(), postUtils.getPostId7()));
 
@@ -177,11 +164,7 @@ public class PostServiceTest {
         //Arrange
         Integer userId = 4698;
         String order = "date_desc";
-        List<UserDto> followedList = List.of(
-                new UserDto(1465, "usuario1"),
-                new UserDto(234, "usuario4"),
-                new UserDto(123, "usuario5")
-        );
+        List<UserDto> followedList = userUtils.getFollowedList();
 
         ArrayList<Post> allPosts = new ArrayList<>(Arrays.asList(postUtils.getPostId1(), postUtils.getPostId2(), postUtils.getPostId7()));
 
@@ -207,11 +190,7 @@ public class PostServiceTest {
         //Arrange
         Integer userId = 4698;
         String order = "date_asc";
-        List<UserDto> followedList = List.of(
-                new UserDto(1465, "usuario1"),
-                new UserDto(234, "usuario4"),
-                new UserDto(123, "usuario5")
-        );
+        List<UserDto> followedList = userUtils.getFollowedList();
 
         ArrayList<Post> allPosts = new ArrayList<>(Arrays.asList(postUtils.getPostId1(), postUtils.getPostId2(), postUtils.getPostId7()));
 
