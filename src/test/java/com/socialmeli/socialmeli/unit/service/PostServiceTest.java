@@ -53,7 +53,7 @@ public class PostServiceTest {
 
         ArrayList<Post> allPosts = new ArrayList<>(Arrays.asList(postUtils.getPostId1(), postUtils.getPostId2(), postUtils.getPostId7()));
 
-        List<PostDto> posts = List.of(postUtils.getPostDtoId7());
+        List<PostDto> posts = List.of(postUtils.getPostDtoId7(), postUtils.getPostDtoId1(), postUtils.getPostDtoId2());
 
         UserFollowedPostsDto expected = new UserFollowedPostsDto(userId, posts);
 
@@ -171,4 +171,63 @@ public class PostServiceTest {
         Assertions.assertThrows(BadRequestException.class, () -> postService.getLastTwoWeeksFollowedPosts(userId, followedList, order));
     }
 
+    @Test
+    @DisplayName("Verify the correct order by date_desc")
+    public void sortDescLastFollowedPostTest(){
+        //Arrange
+        Integer userId = 4698;
+        String order = "date_desc";
+        List<UserDto> followedList = List.of(
+                new UserDto(1465, "usuario1"),
+                new UserDto(234, "usuario4"),
+                new UserDto(123, "usuario5")
+        );
+
+        ArrayList<Post> allPosts = new ArrayList<>(Arrays.asList(postUtils.getPostId1(), postUtils.getPostId2(), postUtils.getPostId7()));
+
+        //Add to list descending
+        List<PostDto> posts = List.of(postUtils.getPostDtoId7(), postUtils.getPostDtoId1(), postUtils.getPostDtoId2());
+
+        UserFollowedPostsDto expected = new UserFollowedPostsDto(userId, posts);
+
+        //Act
+        Mockito.when(this.postRepository.findAll()).thenReturn(allPosts);
+        Mockito.when(mapper.convertPostToDto(postUtils.getPostId1())).thenReturn(postUtils.getPostDtoId1());
+        Mockito.when(mapper.convertPostToDto(postUtils.getPostId2())).thenReturn(postUtils.getPostDtoId2());
+        Mockito.when(mapper.convertPostToDto(postUtils.getPostId7())).thenReturn(postUtils.getPostDtoId7());
+        var result = postService.getLastTwoWeeksFollowedPosts(userId, followedList, order);
+
+        //Assert
+        Assertions.assertEquals(expected, result);
+    }
+
+    @Test
+    @DisplayName("Verify the correct order by date_asc")
+    public void sortAscLastFollowedPostTest(){
+        //Arrange
+        Integer userId = 4698;
+        String order = "date_asc";
+        List<UserDto> followedList = List.of(
+                new UserDto(1465, "usuario1"),
+                new UserDto(234, "usuario4"),
+                new UserDto(123, "usuario5")
+        );
+
+        ArrayList<Post> allPosts = new ArrayList<>(Arrays.asList(postUtils.getPostId1(), postUtils.getPostId2(), postUtils.getPostId7()));
+
+        //Add to list ascending
+        List<PostDto> posts = List.of(postUtils.getPostDtoId2(), postUtils.getPostDtoId1(), postUtils.getPostDtoId7());
+
+        UserFollowedPostsDto expected = new UserFollowedPostsDto(userId, posts);
+
+        //Act
+        Mockito.when(this.postRepository.findAll()).thenReturn(allPosts);
+        Mockito.when(mapper.convertPostToDto(postUtils.getPostId1())).thenReturn(postUtils.getPostDtoId1());
+        Mockito.when(mapper.convertPostToDto(postUtils.getPostId2())).thenReturn(postUtils.getPostDtoId2());
+        Mockito.when(mapper.convertPostToDto(postUtils.getPostId7())).thenReturn(postUtils.getPostDtoId7());
+        var result = postService.getLastTwoWeeksFollowedPosts(userId, followedList, order);
+
+        //Assert
+        Assertions.assertEquals(expected, result);
+    }
 }
