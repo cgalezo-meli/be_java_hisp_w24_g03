@@ -102,6 +102,12 @@ public class UserUtils {
             new UserDto(1465,"usuario1")
     );
 
+    List<UserDto> followedList = List.of(
+            new UserDto(1465, "usuario1"),
+            new UserDto(234, "usuario4"),
+            new UserDto(123, "usuario5")
+    );
+
     public static List<UserDto> convertToUserDtoList(List<User> userList) {
         return userList.stream()
                 .map(u -> new UserDto(u.getUserId(), u.getUserName()))
