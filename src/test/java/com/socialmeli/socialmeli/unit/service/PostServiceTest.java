@@ -2,6 +2,7 @@ package com.socialmeli.socialmeli.unit.service;
 
 import com.socialmeli.socialmeli.dto.PostDto;
 import com.socialmeli.socialmeli.dto.UserDto;
+import com.socialmeli.socialmeli.exceptions.BadRequestException;
 import com.socialmeli.socialmeli.dto.UserFollowedPostsDto;
 import com.socialmeli.socialmeli.entities.Post;
 import com.socialmeli.socialmeli.exceptions.NotFoundException;
@@ -94,4 +95,80 @@ public class PostServiceTest {
             postService.getLastTwoWeeksFollowedPosts(userId, followedList, order);
         });
     }
+
+    @Test
+    @DisplayName("Verify that the order 'date_desc' exists")
+    public void dateDescOrderHappyPath(){
+        //Arrange
+        Integer userId = 4698;
+        String order = "date_desc";
+        List<UserDto> followedList = List.of(
+                new UserDto(1465, "usuario1"),
+                new UserDto(234, "usuario4"),
+                new UserDto(123, "usuario5")
+        );
+
+        ArrayList<Post> allPosts = new ArrayList<>(Arrays.asList(postUtils.getPostId1(), postUtils.getPostId2(), postUtils.getPostId7()));
+
+        //Act
+        Mockito.when(this.postRepository.findAll()).thenReturn(allPosts);
+        Mockito.when(mapper.convertPostToDto(postUtils.getPostId1())).thenReturn(postUtils.getPostDtoId1());
+        Mockito.when(mapper.convertPostToDto(postUtils.getPostId2())).thenReturn(postUtils.getPostDtoId2());
+        Mockito.when(mapper.convertPostToDto(postUtils.getPostId7())).thenReturn(postUtils.getPostDtoId7());
+
+        // Act y Assert
+        Assertions.assertDoesNotThrow(() -> postService.getLastTwoWeeksFollowedPosts(userId, followedList, order),
+                "The order date_desc should exists");
+    }
+
+    @Test
+    @DisplayName("Verify that the order 'date_desc' exists")
+    public void dateAscOrderHappyPath(){
+        //Arrange
+        Integer userId = 4698;
+        String order = "date_asc";
+        List<UserDto> followedList = List.of(
+                new UserDto(1465, "usuario1"),
+                new UserDto(234, "usuario4"),
+                new UserDto(123, "usuario5")
+        );
+
+        ArrayList<Post> allPosts = new ArrayList<>(Arrays.asList(postUtils.getPostId1(), postUtils.getPostId2(), postUtils.getPostId7()));
+
+        //Act
+        Mockito.when(this.postRepository.findAll()).thenReturn(allPosts);
+        Mockito.when(mapper.convertPostToDto(postUtils.getPostId1())).thenReturn(postUtils.getPostDtoId1());
+        Mockito.when(mapper.convertPostToDto(postUtils.getPostId2())).thenReturn(postUtils.getPostDtoId2());
+        Mockito.when(mapper.convertPostToDto(postUtils.getPostId7())).thenReturn(postUtils.getPostDtoId7());
+
+        // Act y Assert
+        Assertions.assertDoesNotThrow(() -> postService.getLastTwoWeeksFollowedPosts(userId, followedList, order),
+                "The order date_desc should exists");
+    }
+
+    @Test
+    @DisplayName("Verify that the order date is invalid by throwing an exception")
+    public void dateOrderSadPath(){
+        // Arrange
+        //Arrange
+        Integer userId = 4698;
+        String order = "invalid_order";
+        List<UserDto> followedList = List.of(
+                new UserDto(1465, "usuario1"),
+                new UserDto(234, "usuario4"),
+                new UserDto(123, "usuario5")
+        );
+
+        ArrayList<Post> allPosts = new ArrayList<>(Arrays.asList(postUtils.getPostId1(), postUtils.getPostId2(), postUtils.getPostId7()));
+
+        //Act
+        Mockito.when(this.postRepository.findAll()).thenReturn(allPosts);
+        Mockito.when(mapper.convertPostToDto(postUtils.getPostId1())).thenReturn(postUtils.getPostDtoId1());
+        Mockito.when(mapper.convertPostToDto(postUtils.getPostId2())).thenReturn(postUtils.getPostDtoId2());
+        Mockito.when(mapper.convertPostToDto(postUtils.getPostId7())).thenReturn(postUtils.getPostDtoId7());
+
+        // Act & Assert
+        Assertions.assertThrows(BadRequestException.class, () -> postService.getLastTwoWeeksFollowedPosts(userId, followedList, order));
+    }
+
 }
