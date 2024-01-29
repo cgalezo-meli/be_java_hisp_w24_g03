@@ -264,12 +264,12 @@ public class UserServiceTest {
         var result = userService.getTotalFollowers(user.getUserId());
 
         //assert
-        Assertions.assertEquals(expected, result);
+        Assertions.assertEquals(expected, result, "The user didn't exist");
     }
 
     @Test
     @DisplayName("Test to get a Not Found Exception when not found an existent user")
-    public void getTotalFollowersThrowsNotFounExceptionTest(){
+    public void getTotalFollowersThrowsNotFoundExceptionTest(){
         //arrange
         int userId = 10;
         Mockito.when(userRepository.findById(userId)).thenReturn(Optional.empty());
